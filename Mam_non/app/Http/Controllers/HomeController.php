@@ -11,9 +11,13 @@ use Illuminate\Support\MessageBag;
 use App\User;
 use Session;
 use Auth;
+use Validator;
+
+
 
 class HomeController extends Controller
-{      
+{     
+
     public function Login()
     {    	
         return view('admin/login');
@@ -38,25 +42,37 @@ class HomeController extends Controller
     }
     public function insertRegister( Request $request )
     {
-    	//validate
-		$validatedData = $request->validate([
+    	// validate
+
+		    $validator = Validator::make($request->all(), [
         	'name_school' => 'required|max:100',
     		'principal' => 'required|max:50',
     		'address' => 'required|max:200',
     		'email' => 'required|email',
     		'password' =>'required|min:8|max:15',
-    		'enter-password' =>'required|same:password',
+    		'enter_password' =>'required|same:password',
    			]);
 
-    // Eloquent  
+    // Eloquent 
     $user = new User;
     $user->name_school = $request -> input('name_school');
     $user->principal = $request -> input('principal');
     $user->address = $request -> input('address');
     $user->email = $request -> input('email');
-    $user->password = $request ->password;
+    $user->password = $request ->input('password');
     $user-> save();
+    //validate-jquery
 
+        if ($validator->passes()) {
+            return response()->json(['success'=>'Added new records.']);
+        }else
+        {
+            return response()->json(['error'=>$validator->errors()->all()]);   
+        }      
 	}
-	
+    
+    public function logout(){
+        Auth::logout();
+        return redirect('login');
+    }	
 }

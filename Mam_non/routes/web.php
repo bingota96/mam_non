@@ -15,11 +15,31 @@ Route::get('/', function () {
     return view('welcome');
 });
 //admin login route
-Route::get('login','HomeController@Login');
+Route::get('login','HomeController@Login')->name('Login');
 Route::post('login','HomeController@insertLogin')->name('post.login');
-Route::get('register','HomeController@Register')->name('register');
-Route::post('register','HomeController@insertRegister')->name('insertRegister');
 
-//Dashbroad
- Route::get('dashbroad','DashbroadController@Dashbroad')->name('dashbroad');
+Route::group(['middleware' => ['Mymiddleware']], function () {
+ 
+	//Register
+	Route::get('register','HomeController@Register')->name('register');
+	Route::post('register','HomeController@insertRegister')->name('insertRegister');
 
+	//Dashbroad
+	 Route::get('dashbroad','DashbroadController@Dashbroad')->name('dashbroad');
+	 //Class
+	 Route::get('class/create','DashbroadController@createClass')->name('createClass');
+	 Route::post('class/create','DashbroadController@insertClass')->name('insertClass');
+	 Route::get('class/edit/{id}','DashbroadController@editClass')->name('editClass')->where('id', '[0-9]+');
+	 Route::post('class/edit/{id}','DashbroadController@updateClass')->name('updateClass')->where('id', '[0-9]+');
+	 Route::get('class','DashbroadController@Class')->name('Class');
+	 Route::post('class','DashbroadController@postClass')->name('postClass');
+	 //Teacher
+	 Route::get('teacher/create','DashbroadController@createTeacher')->name('createTeacher');
+	 Route::post('teacher/create','DashbroadController@insertTeacher')->name('insertTeacher');
+	 Route::get('teacher/edit/{id}','DashbroadController@editTeacher')->name('editTeacher');
+	 Route::post('teacher/edit/{id}','DashbroadController@updateTeacher')->name('updateTeacher');
+	 Route::get('teacher','DashbroadController@Teacher')->name('Teacher');
+	 Route::post('teacher/destroy/{id}','DashbroadController@destroyTeacher')->name('destroyTeacher');
+ });
+ //admin-logout
+ Route::get('logout','HomeController@logout')->name('logout');
