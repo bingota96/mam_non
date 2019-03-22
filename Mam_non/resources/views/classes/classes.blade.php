@@ -95,7 +95,7 @@ td {
 				      	<a href="{{route('editClass',$lop_hoc->id)}}" ><input name="editClass" class="edit" type="image" src="image/icons8-edit-file-64.png" alt="Submit" width="30" height="30" value="{{$lop_hoc->id}}"/>
 				      	</a>
 
-				      	<input  class="destroy1" data-url ="{{route('editClass',$lop_hoc->id)}}" type="image" src="image/icons8-trash-80.png" alt="Submit" width="30" height="30" value="{{$lop_hoc->id}}">
+				      	<input  id="destroy" data-url ="{{route('editClass',$lop_hoc->id)}}" type="image" src="image/icons8-trash-80.png" alt="Submit" width="30" height="30" value="{{$lop_hoc->id}}">
 				      </div>
 				      </td>
 				    </tr>
@@ -113,17 +113,57 @@ td {
 			</div>		
 		</div>
 	</div>
-</div>	
+</div>
+<!-- form-molde-delete -->	
+ <div class="modal" id="myModal1">
+         <div class="modal-dialog ">
+            <div class="modal-content">
+               <!-- Modal Header -->
+               <div class="modal-header">
+                  <h3 class="modal-title">Xóa lớp học</h3>
+                  <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+               </div>
+               <!-- Modal body -->
+               <div class="modal-body">
+	                <p >Bạn muốn xóa lớp</p>
+					<h2 class="class"> </h2>
+               </div>
+               <!-- Modal footer -->
+               <div class="modal-footer">
+                  <button id="delete" type="button" class="btn btn-primary" data-dismiss="modal">Tiếp Tục</button>
+				<button id="cancel" type="button" class="btn btn-primary" data-dismiss="modal">Hủy Bỏ</button>
+               </div>
+            </div>
+         </div>
+      </div>
 		<script src="bootstrap-4.0.0/js/jquery-3.3.1.slim.min.js" ></script>
 		<script src="bootstrap-4.0.0/js/popper.min.js" ></script>
 		<script src="bootstrap-4.0.0/js/bootstrap.min.js" ></script>
 <script type="text/javascript">
-$("#btn_click").click(function () {	
+$(document).ready(function () {	
 	$.ajaxSetup({
 		headers: {
 	                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 	                        }                   
 	                });
+	$(document).on('click','#destroy',function(e){	
+		e.preventDefault();
+		var attr1 =$(this).parents('tr').find("th").html();
+		$('.class').html(attr1);
+		console.log(attr1);
+		$('#myModal1').modal('show');	
+		var url = $(this).attr('data-url');
+		// $(document).on('click','#delete',function(){			
+		// 	$.ajax({
+		// 		type:'post',
+		// 		url : url,
+		// 		success : function(data){
+		// 			  	var a =$(this).parents("tr").remove();
+		// 				}
+		// 	});
+		// });	
+		 // var a =$(this).parents("tr").remove();	
+	});
 });
 </script>
 @endsection

@@ -34,14 +34,17 @@ label#image {
     padding-top: 30px;
 }
 </style>
-
+	<script src="bootstrap-4.0.0/js/jquery-3.3.1.min.js" ></script>
+		<script src="bootstrap-4.0.0/js/popper.min.js" ></script>
+		<script src="bootstrap-4.0.0/js/bootstrap.min.js" ></script>
 <div class="container-fluid">
 			<h3>Tạo Giáo Viên</h3>
+<div id="result">	</div>
 	<div class="container">
 		<div class="row">
 
 			<div class="col-sm|md|lg|xl-1-12">
-				<form method="post" action="">
+				<form method="post" action="" enctype="multipart/form-data" >
 					@csrf
 
 					<div class="form-group row">
@@ -108,19 +111,24 @@ label#image {
 					<div class="form-group row">
 						<label class="col-sm-5 form-control-label" id="image"> Ảnh đại diện </label>
 						<div class="col-sm-3">
-	
+								
 							<input type="image" id="avatar" style="float:right;" src="image/icons8-person-female-100.png" alt="avatar">
-<!-- 
-							        <input type="file" id="uploadFile" name="filesImage" required="true">
-							        <br/>
-							        <input type="submit" value="upload"> -->
 
+							    <input type="file" id="uploadFile" name="filesImage" hidden>
+							        	<br/>
+							    <input type="submit" value="upload" id ="upload">
+
+					@if( $errors->has('filesImage') )
+						<p style ="color:red;">{{$errors->first('filesImage')}}</p>
+
+					@endif
+					
 						</div><!-- col-sm-7 -->
 					</div><!-- form-group row -->
 					<div class="form-group row">
 
 						<div class="col-sm-offset-2 col-sm-10">
-							<button type="submit" class="btn btn-secondary">Tạo mới</button>
+							<button type="submit" class="btn btn-secondary">Lưu</button>
 						</div><!-- col-sm-offset-2 col-sm-10 -->
 					</div><!-- form-group row -->
 				</form>
@@ -128,4 +136,28 @@ label#image {
 		</div><!-- row -->
 	</div><!-- container -->
 </div><!-- container-fluid -->
+
+<script type="text/javascript">
+	$(document).on('click','#avatar',function(e){
+		e.preventDefault();		
+		$("input[id='uploadFile']").click();
+		
+	});
+	$(document).on('click','#upload',function(e){
+		e.preventDefault();
+		// var file_data = $('#uploadFile').prop('files')[0];
+		// console.log(file_data);
+		// $.ajax({
+		// 	url: 'teacher/create',
+		// 	type: 'post',
+		// 	data: {
+		// 		filesImage: file_data,
+		// 	},
+		// 	succes : function(data){
+		// 			$('#result').html();
+		// 	}
+		// })
+		
+	});
+</script>
 @endsection

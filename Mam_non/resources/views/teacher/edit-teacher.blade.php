@@ -36,12 +36,13 @@ label#image {
 </style>
 
 <div class="container-fluid">
-			<h3>Sửa Giáo Viên</h3>
+
+    </ul>
 	<div class="container">
 		<div class="row">
 
 			<div class="col-sm|md|lg|xl-1-12">
-				<form method="post" action="">
+				<form method="post" action="" enctype="multipart/form-data">
 					@csrf
 
 					<div class="form-group row">
@@ -110,12 +111,16 @@ label#image {
 					<div class="form-group row">
 						<label class="col-sm-5 form-control-label" id="image"> Ảnh đại diện </label>
 						<div class="col-sm-3">
-	
-							<input type="image" id="avatar" style="float:right;" src="image/icons8-person-female-100.png" alt="avatar">
-<!-- 
-							        <input type="file" id="uploadFile" name="filesImage" required="true">
+					@if( $errors->has('filesImage') )
+						<p style ="color:red;">{{$errors->first('filesImage')}}</p>
+
+					@endif
+							<input type="image" id="avatar" style="float:right;" src="image/{{$filesImage}}" alt="avatar" width="100" height="100">
+
+							        <input type="file" id="uploadFile" name="filesImage" hidden >
 							        <br/>
-							        <input type="submit" value="upload"> -->
+							        <input type="submit" value="upload">
+
 
 						</div><!-- col-sm-7 -->
 					</div><!-- form-group row -->
@@ -130,4 +135,13 @@ label#image {
 		</div><!-- row -->
 	</div><!-- container -->
 </div><!-- container-fluid -->
+		<script src="bootstrap-4.0.0/js/jquery-3.3.1.min.js" ></script>
+		<script src="bootstrap-4.0.0/js/popper.min.js" ></script>
+		<script src="bootstrap-4.0.0/js/bootstrap.min.js" ></script>
+<script type="text/javascript">
+		$(document).on('click','#avatar',function(e){
+		e.preventDefault();		
+		$("input[id='uploadFile']").click();
+	});
+</script>
 @endsection

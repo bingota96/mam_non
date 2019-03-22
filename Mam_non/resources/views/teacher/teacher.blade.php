@@ -104,10 +104,12 @@ td {
 				  	
    				@foreach ($teacher as $giao_vien)
 
-				    <tr>
-				      <th scope="row">{{ $giao_vien->teacher }}</th>
-				      <td >{{ $giao_vien->filesImage}}</td>
-				      <td >{{ $giao_vien->born}}</td>
+				    <tr id="row{{ $giao_vien->id }}">
+				      <td scope="row">{{ $giao_vien->teacher }}</td>
+				      <td >
+				      	<input type="image" src="image/{{ $giao_vien->filesImage}}" width="100" height="100" data-toggle="modal" data-target="#myModal" id="imageTeacher">
+				      </td>
+				      <td  >{{ $giao_vien->born}}</td>
 				      <td >{{ $giao_vien->class}}</td>
 				      <td >{{ $giao_vien->position}}</td>
 				      <td>
@@ -116,7 +118,7 @@ td {
 				      	<a href="{{route('editTeacher',$giao_vien->id)}}" ><input name="editTeacher" class="edit" type="image" src="image/icons8-edit-file-64.png" alt="Submit" width="30" height="30" />
 				      	</a>
 
-				      	<input  data-url="{{route('destroyTeacher',$giao_vien->id)}}" id="destroy1" type="image" src="image/icons8-trash-80.png" alt="Submit" width="30" height="30">
+				      	<input data-id="row{{$giao_vien->id}}" data-url="{{route('destroyTeacher',$giao_vien->id)}}" class="destroy1" type="image" src="image/icons8-trash-80.png" alt="Submit" width="30" height="30">
 				      </div>
 				      </td>
 				    </tr>
@@ -135,19 +137,41 @@ td {
 		</div>
 	</div>
 </div>
-<!-- form - modal	 -->
+<!-- form - modal -image	 -->
  <div class="modal" id="myModal">
          <div class="modal-dialog ">
             <div class="modal-content">
                <!-- Modal Header -->
-               <div class="modal-header">
+<!--                <div class="modal-header">
                   <h3 class="modal-title">Xóa Giáo Viên</h3>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+               </div> -->
+               <!-- Modal body -->
+               <div class="modal-body">
+	                <img  id="ac1" src="" width="300" height="300" >
+               </div>
+               <!-- Modal footer -->
+<!--                <div class="modal-footer">
+                  <button id="delete" type="button" class="btn btn-primary" data-dismiss="modal">Tiếp Tục</button>
+				<button id="cancel" type="button" class="btn btn-primary" data-dismiss="modal">Hủy Bỏ</button>
+               </div> -->
+            </div>
+         </div>
+      </div>
+<!--  form- model - delete -->
+
+ <div class="modal" id="myModal1">
+         <div class="modal-dialog ">
+            <div class="modal-content">
+               <!-- Modal Header -->
+               <div class="modal-header">
+                  <h3 class="modal-title">Xóa giáo viên</h3>
                   <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
                </div>
                <!-- Modal body -->
                <div class="modal-body">
-	                <p>Bạn có chắc muốn xóa giáo viên</p>
-					<p></p>
+	                <p >Bạn muốn xóa giáo viên</p>
+					<h2 class="teacher"> </h2>
                </div>
                <!-- Modal footer -->
                <div class="modal-footer">
@@ -162,6 +186,11 @@ td {
 		<script src="bootstrap-4.0.0/js/popper.min.js" ></script>
 		<script src="bootstrap-4.0.0/js/bootstrap.min.js" ></script>
 <script type="text/javascript">
+	$(document).on('click','#imageTeacher',function(e){
+		var attr =$(this).attr('src');
+		$('#ac1').attr('src', attr);
+		// console.log(attr);
+	});
 
 $(document).ready(function(){
 		$.ajaxSetup({
@@ -170,21 +199,29 @@ $(document).ready(function(){
 				}
 			});
 
-	$(document).on('click','#destroy1',function(e){	
+	$(document).on('click','.destroy1',function(e){	
 		e.preventDefault();
-		$('#myModal').modal('show');	
+		var attr1 =$(this).parents('tr').find("th").html();
+		$('.teacher').html(attr1);
+		// console.log(attr1);
+		// var a =$(this).parents("tr").remove();	
+		$('#myModal1').modal('show');	
 		var url = $(this).attr('data-url');
-		$(document).on('click','#delete',function(){			
+		$('#delete').attr('rowid', $(this).attr('data-id'));		
+		var row = $('#delete').attr('rowid');
+		console.log(row1);
+		
+		 
+	});
+	$('#delete').on('click',function(){			
 			$.ajax({
 				type:'post',
 				url : url,
 				success : function(data){
-					  	var a =$(this).parents("tr").remove();
+					  $('').parents("tr").remove();
 						}
 			});
 		});	
-		 // var a =$(this).parents("tr").remove();	
-	});
 });
 
 </script>

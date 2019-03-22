@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Http\UploadedFile;
 use Validator;
 
 class DashbroadController extends Controller
@@ -199,17 +200,46 @@ class DashbroadController extends Controller
 
     public function insertTeacher(Request $request){
 
+      if ($request->hasFile('filesImage')) {
+            $file = $request->filesImage;
+
+     //        //Lấy Tên files
+            $fileName = $file->getClientOriginalName();
+     //        echo '<br/>';
+
+     //        //Lấy Đuôi File
+     //      echo 'Đuôi file: ' . $duoi =$file->getClientOriginalExtension();
+     //        echo '<br/>';
+
+     //        //Lấy đường dẫn tạm thời của file
+     //        echo 'Đường dẫn tạm: ' . $file->getRealPath();
+     //        echo '<br/>';
+
+     //        //Lấy kích cỡ của file đơn vị tính theo bytes
+     //        echo 'Kích cỡ file: ' . $file->getSize();
+     //        echo '<br/>';
+
+     //        //Lấy kiểu file
+     //        echo 'Kiểu files: ' . $file->getMimeType();
+     //      
+
+
+      $request->filesImage->storeAs('image', $fileName);
+    }
       $getInput = Input::all();
 
       $rules = [
         "teacher" => 'required|max:50',
         'born' =>'required',
         'position' =>'required',
+        'filesImage' =>'required|image|mimes:jpeg,png,jpg,gif|max:3072',
       ]; 
 
       $messages = [
         'required' => 'Trường :attribute là bắt buộc.',
         'max' => 'Quá :max kí tự.',
+        'image' => 'Bắt buộc là ảnh',
+        'mimes' =>' ',
       ];
 
       $validator = Validator::make($getInput,$rules,$messages);
@@ -225,7 +255,7 @@ class DashbroadController extends Controller
         'born' => $request->input('born'),
         'class' => $request->input('class'),
         'position'=> $request->input('position'),
-        'filesImage' =>'ảnh đẹp'      
+        'filesImage' =>$request->filesImage->getClientOriginalName(),     
       ]);
       return redirect('teacher');
 
@@ -239,6 +269,8 @@ class DashbroadController extends Controller
       $data['born'] = DB::table('teacher')->where('id',$id)->value('born');
       $data['class'] = DB::table('teacher')->where('id',$id)->value('class');
       $data['position'] = DB::table('teacher')->where('id',$id)->value('position');
+      $data['filesImage'] = DB::table('teacher')->where('id',$id)->value('filesImage');
+
 
       $data['name_class'] = DB::table('classes')->get();
 
@@ -253,13 +285,22 @@ class DashbroadController extends Controller
     }
 
     public function updateTeacher(Request $request,$id){
+      
+      //update-Image
+      if ($request->hasFile('filesImage')) {
+        $file = $request->filesImage;
+        $fileName = $file->getClientOriginalName();
+        $request->filesImage->storeAs('image', $fileName);
+      }
 
+// Valiadte
       $getInput = Input::all();
 
       $rules = [
         "teacher" => 'required|max:50',
         'born' =>'required',
         'position' =>'required',
+
       ]; 
 
       $messages = [
@@ -280,7 +321,7 @@ class DashbroadController extends Controller
         'born' => $request->input('born'),
         'class' => $request->input('class'),
         'position'=> $request->input('position'),
-        'filesImage' =>'ảnh đẹp'      
+        'filesImage' =>$request->filesImage->getClientOriginalName(),    
       ]);
       return redirect('teacher');
 
@@ -289,10 +330,10 @@ class DashbroadController extends Controller
 
   public function Teacher(){
 
-          $data['totalStu'] = $data['sameClass'] = DB::table('classes')->select('name_student')->sum('name_student');
-          $data['sameteacher'] = DB::table('teacher')->count();
-          $data['sameClass'] = DB::table('classes')->count();
-          $data['user'] = Auth::user();  
+    $data['totalStu'] = $data['sameClass'] = DB::table('classes')->select('name_student')->sum('name_student');
+    $data['sameteacher'] = DB::table('teacher')->count();
+    $data['sameClass'] = DB::table('classes')->count();
+    $data['user'] = Auth::user();  
     $data['teacher'] = DB::table('teacher')->paginate(4);
  
     return view('teacher.teacher',$data);
@@ -301,7 +342,7 @@ class DashbroadController extends Controller
 //end-teacher
 
   public function destroyTeacher(Request $request,$id){
-    echo $abc = "aaaa";
-    // $data['teacher'] = DB::table('teacher')->where('id' ,$id)->delete();
+    // echo $abc = "aaaa";
+    $data['teacher'] = DB::table('teacher')->where('id' ,$id)->delete();
   }
 }
