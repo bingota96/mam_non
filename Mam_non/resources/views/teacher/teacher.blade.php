@@ -209,11 +209,7 @@ $(document).ready(function(){
 		var url = $(this).attr('data-url');
 		$('#delete').attr('rowid', $(this).attr('data-id'));		
 		var row = $('#delete').attr('rowid');
-		console.log(row1);
-		
-		 
-	});
-	$('#delete').on('click',function(){			
+		$('#delete').on('click',function(e){		
 			$.ajax({
 				type:'post',
 				url : url,
@@ -221,6 +217,9 @@ $(document).ready(function(){
 					  $('').parents("tr").remove();
 						}
 			});
+		 
+	});
+
 		});	
 });
 
