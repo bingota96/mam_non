@@ -335,10 +335,29 @@ class DashbroadController extends Controller
     $data['sameClass'] = DB::table('classes')->count();
     $data['user'] = Auth::user();  
     $data['teacher'] = DB::table('teacher')->paginate(4);
+
+
  
     return view('teacher.teacher',$data);
   }
 
+  // chỗ em làm sort
+  // thuộc tính input type= "image" nên e không request được 
+  // e định kiểm tra nếu có $request->sort thì e sẽ thực hiện câu lệnh
+  // "$data['teacher'] = DB::table('teacher')->orderBy('teacher')->paginate(4);"
+  //e muốn mỗi cột e lấy 1 request rồi sẽ orderBy('') mỗi thuốc tính khác nhau trong cột ấy ạ
+  
+  public function postTeacher(Request $request){
+
+  if ($request->all()){
+    $data['teacher'] = DB::table('teacher')->orderBy('teacher')->paginate(4);
+  }
+    $data['totalStu'] = $data['sameClass'] = DB::table('classes')->select('name_student')->sum('name_student');
+    $data['sameteacher'] = DB::table('teacher')->count();
+    $data['sameClass'] = DB::table('classes')->count();
+    $data['user'] = Auth::user(); 
+    return view('teacher.teacher',$data);
+  }
 //end-teacher
 
   public function destroyTeacher(Request $request,$id){

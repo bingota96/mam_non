@@ -39,6 +39,7 @@ Route::group(['middleware' => ['Mymiddleware']], function () {
 	 Route::get('teacher/edit/{id}','DashbroadController@editTeacher')->name('editTeacher');
 	 Route::post('teacher/edit/{id}','DashbroadController@updateTeacher')->name('updateTeacher');
 	 Route::get('teacher','DashbroadController@Teacher')->name('Teacher');
+	 Route::post('teacher','DashbroadController@postTeacher')->name('postTeacher');
 	 Route::post('teacher/destroy/{id}','DashbroadController@destroyTeacher')->name('destroyTeacher');
  });
  //admin-logout

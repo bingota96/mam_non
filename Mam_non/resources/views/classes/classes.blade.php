@@ -95,7 +95,7 @@ td {
 				      	<a href="{{route('editClass',$lop_hoc->id)}}" ><input name="editClass" class="edit" type="image" src="image/icons8-edit-file-64.png" alt="Submit" width="30" height="30" value="{{$lop_hoc->id}}"/>
 				      	</a>
 
-				      	<input  id="destroy" data-url ="{{route('editClass',$lop_hoc->id)}}" type="image" src="image/icons8-trash-80.png" alt="Submit" width="30" height="30" value="{{$lop_hoc->id}}">
+				      	<input  class="destroy" data-url ="{{route('editClass',$lop_hoc->id)}}" type="image" src="image/icons8-trash-80.png" alt="Submit" width="30" height="30" value="{{$lop_hoc->id}}">
 				      </div>
 				      </td>
 				    </tr>
@@ -146,7 +146,7 @@ $(document).ready(function () {
 	                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
 	                        }                   
 	                });
-	$(document).on('click','#destroy',function(e){	
+	$(document).on('click','.destroy',function(e){	
 		e.preventDefault();
 		var attr1 =$(this).parents('tr').find("th").html();
 		$('.class').html(attr1);

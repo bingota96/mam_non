@@ -16,47 +16,46 @@
 	}
 	.btn-toolbar.justify-content-between {
     margin-top: 40px;
-}
-.card-header{
-	padding: 0px;
-}
-h3 {
-    margin-top: 20px;
-}
-.flex{
-	margin-top: 10px;
-}
-/*th.img {
-    background: url(image/icons8-sort-down-26.png) no-repeat right 50%;
-}*/
-.hinhanh {
-    margin-left: 15px;
-}
-input.edit {
-    margin-right: 20px;
-}
-th.acction ,.stu, .img{
-	text-align: center;
-    width: 15%;
-}
-th.age{
-	text-align: center;
-    width: 10%;	
-}
-th.tech{
-	text-align: center;
-    width: 22%;	
-}
-td {
-    text-align: center;
-}
+	}
+	.card-header{
+		padding: 0px;
+	}
+	h3 {
+	    margin-top: 20px;
+	}
+	.flex{
+		margin-top: 10px;
+	}
+	/*th.img {
+	    background: url(image/icons8-sort-down-26.png) no-repeat right 50%;
+	}*/
+	.hinhanh {
+	    margin-left: 15px;
+	}
+	input.edit {
+	    margin-right: 20px;
+	}
+	th.acction ,.stu, .img{
+		text-align: center;
+	    width: 15%;
+	}
+	th.age{
+		text-align: center;
+	    width: 10%;	
+	}
+	th.tech{
+		text-align: center;
+	    width: 22%;	
+	}
+	td {
+	    text-align: center;
+	}
 </style>
 <div class="container-fluid">
-			<h3>Danh Sách Giáo Viên</h3>	
-			<div id="result">
-				
-			</div>
-			<div class="container">		
+		<h3>Danh Sách Giáo Viên</h3>	
+		<div class="container">
+			<form method="post" action="" enctype="multipart/form-data">	
+			@csrf	
 		<div class="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">
 
   <div class="btn-group" role="group" aria-label="First group">
@@ -75,7 +74,7 @@ td {
 				  <thead>
 				    <tr>	
 				      <th scope="col" class="teacher">Tên giáo viên 
-				      	<input type="image" style="float:right;" src="image/icons8-sort-down-24.png" alt="Submit" width="23" height="23">	   				      
+				      	<input type="image" style="float:right;" src="image/icons8-sort-down-24.png" alt="Submit" width="23" height="23" name="sort">	   				      
 				      </th>
 
 				      <th scope="col" class="img">Ảnh đại diện 
@@ -107,7 +106,7 @@ td {
 				    <tr id="row{{ $giao_vien->id }}">
 				      <td scope="row">{{ $giao_vien->teacher }}</td>
 				      <td >
-				      	<input type="image" src="image/{{ $giao_vien->filesImage}}" width="100" height="100" data-toggle="modal" data-target="#myModal" id="imageTeacher">
+				      	<input type="image" src="image/{{ $giao_vien->filesImage}}" width="100" height="100" data-toggle="modal" data-target="#myModal2" id="imageTeacher">
 				      </td>
 				      <td  >{{ $giao_vien->born}}</td>
 				      <td >{{ $giao_vien->class}}</td>
@@ -132,13 +131,14 @@ td {
 		{{ $teacher->links() }}
 
 		</div>
-				</div>	
+				</div>
+				</form>	
 			</div>		
 		</div>
 	</div>
 </div>
 <!-- form - modal -image	 -->
- <div class="modal" id="myModal">
+ <div class="modal" id="myModal2">
          <div class="modal-dialog ">
             <div class="modal-content">
                <!-- Modal Header -->
@@ -148,7 +148,7 @@ td {
                </div> -->
                <!-- Modal body -->
                <div class="modal-body">
-	                <img  id="ac1" src="" width="300" height="300" >
+	                <img  id="modalImage" src="" width="300" height="300" >
                </div>
                <!-- Modal footer -->
 <!--                <div class="modal-footer">
@@ -186,9 +186,11 @@ td {
 		<script src="bootstrap-4.0.0/js/popper.min.js" ></script>
 		<script src="bootstrap-4.0.0/js/bootstrap.min.js" ></script>
 <script type="text/javascript">
+	
 	$(document).on('click','#imageTeacher',function(e){
+		e.preventDefault();
 		var attr =$(this).attr('src');
-		$('#ac1').attr('src', attr);
+		$('#modalImage').attr('src', attr);
 		// console.log(attr);
 	});
 
@@ -203,20 +205,19 @@ $(document).ready(function(){
 		e.preventDefault();
 		var attr1 =$(this).parents('tr').find("th").html();
 		$('.teacher').html(attr1);
-		// console.log(attr1);
-		// var a =$(this).parents("tr").remove();	
 		$('#myModal1').modal('show');	
 		var url = $(this).attr('data-url');
 		$('#delete').attr('rowid', $(this).attr('data-id'));		
 		var row = $('#delete').attr('rowid');
-		$('#delete').on('click',function(e){		
-			$.ajax({
-				type:'post',
-				url : url,
-				success : function(data){
-					  $('').parents("tr").remove();
-						}
-			});
+		
+			$('#delete').on('click',function(e){		
+				$.ajax({
+					type:'post',
+					url : url,
+					success : function(data){
+						 $('tr#'+row).remove();
+							}
+				});
 		 
 	});
 

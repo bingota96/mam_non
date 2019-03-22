@@ -112,12 +112,9 @@ label#image {
 						<label class="col-sm-5 form-control-label" id="image"> Ảnh đại diện </label>
 						<div class="col-sm-3">
 								
-							<input type="image" id="avatar" style="float:right;" src="image/icons8-person-female-100.png" alt="avatar">
+							<input type="image" id="avatar" style="float:right;" src="image/icons8-person-female-100.png" alt="avatar" width="100" height="100">
 
-							    <input type="file" id="uploadFile" name="filesImage" hidden>
-							        	<br/>
-							    <input type="submit" value="upload" id ="upload">
-
+							    <input type="file" id="uploadFile" name="filesImage" onchange="loadFile(event)"hidden>
 					@if( $errors->has('filesImage') )
 						<p style ="color:red;">{{$errors->first('filesImage')}}</p>
 
@@ -136,15 +133,19 @@ label#image {
 		</div><!-- row -->
 	</div><!-- container -->
 </div><!-- container-fluid -->
-
+<script>
+  var loadFile = function(event) {
+    var output = document.getElementById('avatar');
+    output.src = URL.createObjectURL(event.target.files[0]);
+  };
+</script>
 <script type="text/javascript">
 	$(document).on('click','#avatar',function(e){
 		e.preventDefault();		
-		$("input[id='uploadFile']").click();
-		
+		$("input[id='uploadFile']").click();		
 	});
-	$(document).on('click','#upload',function(e){
-		e.preventDefault();
+	// $(document).on('click','#upload',function(e){
+	// 	e.preventDefault();
 		// var file_data = $('#uploadFile').prop('files')[0];
 		// console.log(file_data);
 		// $.ajax({
@@ -158,6 +159,6 @@ label#image {
 		// 	}
 		// })
 		
-	});
+	// });
 </script>
 @endsection
