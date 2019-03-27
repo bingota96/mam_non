@@ -83,8 +83,10 @@ label#image {
 						<div class="col-sm-5">
 							<select type="number" class="form-control" id="inputNumber1" name="class">
 
-								@foreach($name_class as $ten_lop_hoc)
-							<option> {{$ten_lop_hoc -> class}}</option>							
+							@foreach($name_class as $ten_lop_hoc)
+
+							<option> {{$ten_lop_hoc -> class}}</option>	
+
 							@endforeach
 
 							</select>
@@ -114,7 +116,7 @@ label#image {
 								
 							<input type="image" id="avatar" style="float:right;" src="image/icons8-person-female-100.png" alt="avatar" width="100" height="100">
 
-							    <input type="file" id="uploadFile" name="filesImage" onchange="loadFile(event)"hidden>
+							    <input type="file" id="uploadFile" name="filesImage" onchange="loadFile(event)" hidden>
 					@if( $errors->has('filesImage') )
 						<p style ="color:red;">{{$errors->first('filesImage')}}</p>
 

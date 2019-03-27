@@ -20,7 +20,7 @@ class Mam_non
         if(Auth::check()){   
          
         }else{
-           abort(403, 'Unauthorized action.');
+            return redirect()->route('Login');        
         }
          return $next($request);
     }

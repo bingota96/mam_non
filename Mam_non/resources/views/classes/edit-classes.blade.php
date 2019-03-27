@@ -84,7 +84,7 @@ h3 {
 					<div class="form-group row">
 
 						<div class="col-sm-offset-2 col-sm-10">
-							<button type="submit" class="btn btn-secondary">Tạo mới</button>
+							<button type="submit" class="btn btn-secondary">Lưu</button>
 						</div>
 					</div><!-- form-group row -->
 				</form>

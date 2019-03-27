@@ -117,17 +117,14 @@ label#image {
 					@endif
 							<input type="image" id="avatar" style="float:right;" src="image/{{$filesImage}}" alt="avatar" width="100" height="100">
 
-							        <input type="file" id="uploadFile" name="filesImage" hidden >
-							        <br/>
-							        <input type="submit" value="upload">
-
-
+							        <input type="file" id="uploadFile" name="filesImage" onchange="loadFile(event)" hidden >
+							      
 						</div><!-- col-sm-7 -->
 					</div><!-- form-group row -->
 					<div class="form-group row">
 
 						<div class="col-sm-offset-2 col-sm-10">
-							<button type="submit" class="btn btn-secondary">Tạo mới</button>
+							<button type="submit" class="btn btn-secondary">Lưu</button>
 						</div><!-- col-sm-offset-2 col-sm-10 -->
 					</div><!-- form-group row -->
 				</form>
@@ -139,9 +136,14 @@ label#image {
 		<script src="bootstrap-4.0.0/js/popper.min.js" ></script>
 		<script src="bootstrap-4.0.0/js/bootstrap.min.js" ></script>
 <script type="text/javascript">
+		var loadFile = function(event) {
+	    var output = document.getElementById('avatar');
+	    output.src = URL.createObjectURL(event.target.files[0]);
+	  	};
 		$(document).on('click','#avatar',function(e){
-		e.preventDefault();		
-		$("input[id='uploadFile']").click();
-	});
+			e.preventDefault();		
+			$("input[id='uploadFile']").click();
+			});
+		
 </script>
 @endsection

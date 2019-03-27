@@ -27,6 +27,7 @@ class DashbroadController extends Controller
 
           $data['five'] = DB::table('classes')->where('age',5)->count();
           $data['people5'] = DB::table('classes')->where('age',5)->select('name_student')->sum('name_student');
+          
 //table -teacher
           $data['chinhthuc'] = DB::table('teacher')->where('position','Chính thức')->count();
 
@@ -36,7 +37,7 @@ class DashbroadController extends Controller
 
           $data['partime'] = DB::table('teacher')->where('position','Part time')->count();
 
-          $data['totalStu'] = $data['sameClass'] = DB::table('classes')->select('name_student')->sum('name_student');
+          $data['totalStu'] =  DB::table('classes')->select('name_student')->sum('name_student');
 
           $data['sameteacher'] = DB::table('teacher')->count();
           $data['sameClass'] = DB::table('classes')->count();
@@ -47,11 +48,11 @@ class DashbroadController extends Controller
 
     public function createClass(){
 
-
-          $data['totalStu'] = $data['sameClass'] = DB::table('classes')->select('name_student')->sum('name_student');
-          $data['sameteacher'] = DB::table('teacher')->count();
-          $data['sameClass'] = DB::table('classes')->count();
-          $data['user'] = Auth::user();  
+        
+        $data['totalStu'] =  DB::table('classes')->select('name_student')->sum('name_student');
+        $data['sameteacher'] = DB::table('teacher')->count();
+        $data['sameClass'] = DB::table('classes')->count();
+        $data['user'] = Auth::user();  
 
       return view('classes.createClass',$data);
     }
@@ -114,20 +115,17 @@ class DashbroadController extends Controller
 
     public function editClass($id){
       $data['class1'] = DB::table('classes')->count();
-      if($id<0){
-        echo 'looi';
-        die;
-      }
-      if($id>$data['class1']) {
-        echo 'looi';
-        die;
-      }
+    // if ($data['class'] == null) {
+    //     $data['msg'] = 'Does not exist any class !';
+    //       return view('classes.edit-classes',$data);
+    //   }
+
 
       $data['class'] = DB::table('classes')->where('id',$id)->value('class');
       $data['age'] = DB::table('classes')->where('id',$id)->value('age');
       $data['number_student'] = DB::table('classes')->where('id',$id)->value('name_student');
 
-          $data['totalStu'] = $data['sameClass'] = DB::table('classes')->select('name_student')->sum('name_student');
+          $data['totalStu'] =  DB::table('classes')->select('name_student')->sum('name_student');
           $data['sameteacher'] = DB::table('teacher')->count();
           $data['sameClass'] = DB::table('classes')->count();
           $data['user'] = Auth::user();              
@@ -164,34 +162,46 @@ class DashbroadController extends Controller
     }
 //end-edit-class
 
-    public function Class(){
+    public function Class(Request $request){
 
-          $data['totalStu'] = $data['sameClass'] = DB::table('classes')->select('name_student')->sum('name_student');
-          $data['sameteacher'] = DB::table('teacher')->count();
-          $data['sameClass'] = DB::table('classes')->count();
-          $data['user'] = Auth::user();  
-       $data['class']= DB::table('classes')->paginate(4);
- 
+        
+
+                
+        $data['totalStu'] = $class->select('name_student')->sum('name_student');
+        $data['sameteacher'] = DB::table('teacher')->count();
+        $data['sameClass'] = $class->count();
+        $data['user'] = Auth::user();
+
+       
+        
+        $class = DB::table('classes');
+        $orderBy = $request->input('orderBy');
+        $order = $request->input('order');
+        
+        if (isset($orderBy)) {
+
+          $class = $class->orderBy($orderBy, $order);
+          $order = (!is_null($order) and $order === 'desc') ? 'asc' : 'desc';
+
+        }
+
+        
+        $data['order'] = $order;
+
+        $data['orderBy'] = $orderBy;
+
+        $data['class'] = $class->orderBy('id', 'desc')->paginate(4);
+
       return view('classes.classes',$data);
     }
-    
-    public function postClass(Request $request){
 
-          $data['totalStu'] = $data['sameClass'] = DB::table('classes')->select('name_student')->sum('name_student');
-          $data['sameteacher'] = DB::table('teacher')->count();
-          $data['sameClass'] = DB::table('classes')->count();
-          $data['user'] = Auth::user();  
-      $data['class']= DB::table('classes')->orderBy('age', '')->paginate(4);
-      
-      return view('classes.classes',$data);
-    }
 //end-class
 
     public function createTeacher(){
 
-      $data['name_class'] = DB::table('classes')->get();
+        $data['name_class'] = DB::table('classes')->get();
 
-          $data['totalStu'] = $data['sameClass'] = DB::table('classes')->select('name_student')->sum('name_student');
+          $data['totalStu'] =  DB::table('classes')->select('name_student')->sum('name_student');
           $data['sameteacher'] = DB::table('teacher')->count();
           $data['sameClass'] = DB::table('classes')->count();
           $data['user'] = Auth::user();        
@@ -275,7 +285,7 @@ class DashbroadController extends Controller
       $data['name_class'] = DB::table('classes')->get();
 
       
-          $data['totalStu'] = $data['sameClass'] = DB::table('classes')->select('name_student')->sum('name_student');
+          $data['totalStu'] =  DB::table('classes')->select('name_student')->sum('name_student');
           $data['sameteacher'] = DB::table('teacher')->count();
           $data['sameClass'] = DB::table('classes')->count();
           $data['user'] = Auth::user();  
@@ -285,14 +295,18 @@ class DashbroadController extends Controller
     }
 
     public function updateTeacher(Request $request,$id){
-      
+
       //update-Image
       if ($request->hasFile('filesImage')) {
         $file = $request->filesImage;
-        $fileName = $file->getClientOriginalName();
-        $request->filesImage->storeAs('image', $fileName);
+        $fileNameNew = $file->getClientOriginalName();
+        $request->filesImage->storeAs('image', $fileNameNew);
       }
+        $file = $request->filesImage;
+        $data['filesImage'] = DB::table('teacher')->where('id',$id)->value('filesImage');
+        $fileName = isset( $file) ?  $file->getClientOriginalName()  : $data['filesImage'] ;
 
+        
 // Valiadte
       $getInput = Input::all();
 
@@ -321,47 +335,63 @@ class DashbroadController extends Controller
         'born' => $request->input('born'),
         'class' => $request->input('class'),
         'position'=> $request->input('position'),
-        'filesImage' =>$request->filesImage->getClientOriginalName(),    
+        'filesImage' =>$fileName,
+            
       ]);
       return redirect('teacher');
 
     }  
 //end-edit-teacher
 
-  public function Teacher(){
+  public function Teacher(Request $request){
 
-    $data['totalStu'] = $data['sameClass'] = DB::table('classes')->select('name_student')->sum('name_student');
+    $data['totalStu'] = DB::table('classes')->select('name_student')->sum('name_student');
     $data['sameteacher'] = DB::table('teacher')->count();
     $data['sameClass'] = DB::table('classes')->count();
     $data['user'] = Auth::user();  
-    $data['teacher'] = DB::table('teacher')->paginate(4);
+    $teacher = DB::table('teacher');
+   
 
+    $orderBy = $request->input('orderBy');
+    $order = $request->input('order');
 
- 
-    return view('teacher.teacher',$data);
+    if (isset($orderBy)) {
+
+      $teacher = $teacher->orderBy($orderBy, $order);
+      $order = (!is_null($order) and $order === 'desc') ? 'asc' : 'desc';
+
+    }
+
+    
+    $data['order'] = $order;
+
+    $data['orderBy'] = $orderBy;
+
+    $data['teacher'] = $teacher->orderBy('id', 'desc')->paginate(4);
+
+    return view('teacher.teacher', $data);
   }
-
-  // chỗ em làm sort
-  // thuộc tính input type= "image" nên e không request được 
-  // e định kiểm tra nếu có $request->sort thì e sẽ thực hiện câu lệnh
-  // "$data['teacher'] = DB::table('teacher')->orderBy('teacher')->paginate(4);"
-  //e muốn mỗi cột e lấy 1 request rồi sẽ orderBy('') mỗi thuốc tính khác nhau trong cột ấy ạ
   
-  public function postTeacher(Request $request){
+  // public function postTeacher(Request $request){
 
-  if ($request->all()){
-    $data['teacher'] = DB::table('teacher')->orderBy('teacher')->paginate(4);
-  }
-    $data['totalStu'] = $data['sameClass'] = DB::table('classes')->select('name_student')->sum('name_student');
-    $data['sameteacher'] = DB::table('teacher')->count();
-    $data['sameClass'] = DB::table('classes')->count();
-    $data['user'] = Auth::user(); 
-    return view('teacher.teacher',$data);
-  }
+  // if ($request->all()){
+  //   $data['teacher'] = DB::table('teacher')->orderBy('teacher')->paginate(4);
+  // }
+  //   $data['totalStu'] =  DB::table('classes')->select('name_student')->sum('name_student');
+  //   $data['sameteacher'] = DB::table('teacher')->count();
+  //   $data['sameClass'] = DB::table('classes')->count();
+  //   $data['user'] = Auth::user(); 
+  //   return view('teacher.teacher',$data);
+  // }
 //end-teacher
 
   public function destroyTeacher(Request $request,$id){
-    // echo $abc = "aaaa";
+
     $data['teacher'] = DB::table('teacher')->where('id' ,$id)->delete();
+  }
+
+  public function destroyClass(Request $request,$id){
+
+    $data['teacher'] = DB::table('classes')->where('id' ,$id)->delete();
   }
 }
