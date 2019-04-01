@@ -120,7 +120,8 @@ h3 {
                                 </tr>
                             </thead>
                             <tbody>
-                                
+              
+                    
                                 @foreach ($teacher as $giao_vien)
 
                                 <tr id="row{{ $giao_vien->id }}">
@@ -129,7 +130,9 @@ h3 {
                                         <input type="image" src="image/{{ $giao_vien->filesImage}}" width="100" height="100" data-toggle="modal" data-target="#myModal2" id="imageTeacher">
                                     </td>
                                     <td  >{{ $giao_vien->born}}</td>
-                                    <td >{{ $giao_vien->class}}</td>
+                                
+                                    <td >{{ $giao_vien->classes->class }}</td>
+                                  
                                     <td >{{ $giao_vien->position}}</td>
                                     <td>
                                         <div class="hinhanh" >
@@ -141,7 +144,9 @@ h3 {
                                         </div>
                                     </td>
                                 </tr>
+
                                 @endforeach
+
                             </tbody>    
                         </table>
                         
@@ -225,23 +230,24 @@ h3 {
             e.preventDefault();
             var attr1 =$(this).parents('tr').find("th").html();
             $('.teacher').html(attr1);
-            $('#myModal1').modal('show');   
-            var url = $(this).attr('data-url');
-            $('#delete').attr('rowid', $(this).attr('data-id'));        
-            var row = $('#delete').attr('rowid');
-            
-            $('#delete').on('click',function(e){        
+            $('#myModal1').modal('show');
+            //var url = $(this).attr('data-url');
+            $('#delete').attr('rowid', $(this).attr('data-id'));    
+            $('#delete').attr('url', $(this).attr('data-url'));   
+            //var row = $('#delete').attr('rowid');
+        }); 
+
+        $('#delete').on('click',function(e){        
                 $.ajax({
                     type:'post',
-                    url : url,
+                    url : $(this).attr('url'),
                     success : function(data){
-                        $('tr#'+row).remove();
+                        $('tr#'+ $('#delete').attr('rowid')).remove();
+                        //$('tr#'+row).remove();
                     }
                 });
                 
             });
-
-        }); 
     });
 
 </script>

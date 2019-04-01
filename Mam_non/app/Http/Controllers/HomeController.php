@@ -54,21 +54,25 @@ class HomeController extends Controller
    			]);
 
     // Eloquent 
-    $user = new User;
-    $user->name_school = $request -> input('name_school');
-    $user->principal = $request -> input('principal');
-    $user->address = $request -> input('address');
-    $user->email = $request -> input('email');
-    $user->password = $request ->input('password');
-    $user-> save();
+
     //validate-jquery
 
         if ($validator->passes()) {
+            
+            $user = new User;
+            $user->name_school = $request ->input('name_school');
+            $user->principal = $request ->input('principal');
+            $user->address = $request ->input('address');
+            $user->email = $request ->input('email');
+            $user->password = $request->input('password');
+            $user-> save();
+
             return response()->json(['success'=>'Added new records.']);
         }else
         {
             return response()->json(['error'=>$validator->errors()->all()]);   
-        }      
+        }
+      
 	}
     
     public function logout(){

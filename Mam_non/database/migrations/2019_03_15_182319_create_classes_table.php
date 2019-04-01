@@ -18,6 +18,7 @@ class CreateClassesTable extends Migration
             $table->string('class');
             $table->integer('age');
             $table->integer('name_student');
+            $table->integer('id_users');
             $table->timestamps();
         });
     }

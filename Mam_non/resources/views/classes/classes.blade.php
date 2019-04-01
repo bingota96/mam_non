@@ -89,7 +89,7 @@ h3 {
 						</th>
 						<th scope="col" class="tech">Giáo viên
 
-							<a href="{{ route('Class',['orderBy' => 'class','order' => isset($order) ? $order : 'desc'])}}">
+							<a href="{{ route('Class',['orderBy' => 'teacher_count','order' => isset($order) ? $order : 'desc'])}}">
 								@if(isset( $order, $orderBy ) && $order == 'desc' &&  $orderBy == 'class')
 								<input type="image" style="float:right;" src="image/icons8-sort-down-24.png" alt="Submit" width="23" height="23">
 								@else
@@ -125,7 +125,7 @@ h3 {
 						<th  scope="row">{{ $lop_hoc->class }}</th>
 						<td >{{ $lop_hoc->age}}</td>
 
-						<td></td>
+						<td>{{ $lop_hoc->teacher->count()  }}  </td>
 						<td>{{ $lop_hoc->name_student}}</td>
 						<td >
 							<div class="hinhanh" >

@@ -9,57 +9,66 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Http\UploadedFile;
 use Validator;
-
+use App\Classes;
+use App\Teacher;
 class DashbroadController extends Controller
 {
 
     public function Dashbroad(){
-      	
+
+        $data['user'] = Auth::user(); 
+        $id_users =  Auth::user()->id;
+
 //table-classes
-          $data['tow'] = DB::table('classes')->where('age',2)->count();
-          $data['people2'] = DB::table('classes')->where('age',2)->select('name_student')->sum('name_student');
+          $data['tow'] = DB::table('classes')->where('age','2')->where('id_users',$id_users)->count();
+          $data['people2'] = DB::table('classes')->where('age',2)->where('id_users',$id_users)->select('name_student')->sum('name_student');
 
-          $data['three'] = DB::table('classes')->where('age',3)->count();
-          $data['people3'] = DB::table('classes')->where('age',3)->select('name_student')->sum('name_student');
+          $data['three'] = DB::table('classes')->where('age',3)->where('id_users',$id_users)->count();
+          $data['people3'] = DB::table('classes')->where('age',3)->where('id_users',$id_users)->select('name_student')->sum('name_student');
 
-          $data['four'] = DB::table('classes')->where('age',4)->count();
-          $data['people4'] = DB::table('classes')->where('age',4)->select('name_student')->sum('name_student');
+          $data['four'] = DB::table('classes')->where('age',4)->where('id_users',$id_users)->count();
+          $data['people4'] = DB::table('classes')->where('age',4)->where('id_users',$id_users)->select('name_student')->sum('name_student');
 
-          $data['five'] = DB::table('classes')->where('age',5)->count();
-          $data['people5'] = DB::table('classes')->where('age',5)->select('name_student')->sum('name_student');
+          $data['five'] = DB::table('classes')->where('age',5)->where('id_users',$id_users)->count();
+          $data['people5'] = DB::table('classes')->where('age',5)->where('id_users',$id_users)->select('name_student')->sum('name_student');
           
 //table -teacher
-          $data['chinhthuc'] = DB::table('teacher')->where('position','Chính thức')->count();
+          $data['chinhthuc'] = DB::table('teacher')->where('position','Chính thức')->where('id_users',$id_users)->count();
 
-          $data['thoivu'] = DB::table('teacher')->where('position','Thời vụ')->count();
+          $data['thoivu'] = DB::table('teacher')->where('position','Thời vụ')->where('id_users',$id_users)->count();
 
-          $data['thuviec'] = DB::table('teacher')->where('position','Thử việc')->count();
+          $data['thuviec'] = DB::table('teacher')->where('position','Thử việc')->where('id_users',$id_users)->count();
 
-          $data['partime'] = DB::table('teacher')->where('position','Part time')->count();
+          $data['partime'] = DB::table('teacher')->where('position','Part time')->where('id_users',$id_users)->count();
 
-          $data['totalStu'] =  DB::table('classes')->select('name_student')->sum('name_student');
 
-          $data['sameteacher'] = DB::table('teacher')->count();
-          $data['sameClass'] = DB::table('classes')->count();
-          $data['user'] = Auth::user();     
+
+          $data['totalStu'] =  DB::table('classes')->select('name_student')->where('id_users',$id_users)->sum('name_student');
+          $data['sameteacher'] = DB::table('teacher')->where('id_users',$id_users)->count();
+          $data['sameClass'] = DB::table('classes')->where('id_users',$id_users)->count();
+              
   	    	return view('dashbroad.dashbroad',$data);
       }
 //end-dashbroad
 
     public function createClass(){
 
-        
-        $data['totalStu'] =  DB::table('classes')->select('name_student')->sum('name_student');
-        $data['sameteacher'] = DB::table('teacher')->count();
-        $data['sameClass'] = DB::table('classes')->count();
-        $data['user'] = Auth::user();  
+        $data['user'] = Auth::user(); 
+        $id_users =  Auth::user()->id;
+
+        $data['totalStu'] =  DB::table('classes')->select('name_student')->where('id_users',$id_users)->sum('name_student');
+        $data['sameteacher'] = DB::table('teacher')->where('id_users',$id_users)->count();
+        $data['sameClass'] = DB::table('classes')->where('id_users',$id_users)->count();
+ 
 
       return view('classes.createClass',$data);
     }
 
     public function insertClass(Request $request) {
 
-      $getInput = Input::all();
+        $id_class = Auth::user()->id; 
+
+        $getInput = Input::all();
       $rules = [
         'class' =>'required|max:30',
         'age' => 'required',
@@ -84,6 +93,7 @@ class DashbroadController extends Controller
         'class'=>$request->input('class'),
         'age'=>$request->input('age'),
         'name_student'=>$request->input('number_student'),
+        'id_users' => $id_class,
       ]);
       return redirect('class');
 // Cách 2
@@ -114,6 +124,7 @@ class DashbroadController extends Controller
 //end-insert-class
 
     public function editClass($id){
+
       $data['class1'] = DB::table('classes')->count();
     // if ($data['class'] == null) {
     //     $data['msg'] = 'Does not exist any class !';
@@ -165,26 +176,33 @@ class DashbroadController extends Controller
     public function Class(Request $request){
 
         
+   
+        $data['user'] = Auth::user(); 
+        $id_users =  Auth::user()->id;
 
-                
-        $data['totalStu'] = $class->select('name_student')->sum('name_student');
-        $data['sameteacher'] = DB::table('teacher')->count();
-        $data['sameClass'] = $class->count();
-        $data['user'] = Auth::user();
+        $data['totalStu'] =  DB::table('classes')->select('name_student')->where('id_users',$id_users)->sum('name_student');
+        $data['sameteacher'] = DB::table('teacher')->where('id_users',$id_users)->count();
+        $data['sameClass'] = DB::table('classes')->where('id_users',$id_users)->count();
+
+        // $data['totalStu'] = DB::table('classes')->select('name_student')->sum('name_student');
+        // $data['sameteacher'] = DB::table('teacher')->count();
+        // $data['sameClass'] = DB::table('classes')->count();
+        // $data['user'] = Auth::user();
 
        
         
-        $class = DB::table('classes');
+        $class = Classes::withCount('teacher')->where('id_users',$id_users);
+        
         $orderBy = $request->input('orderBy');
         $order = $request->input('order');
-        
+
+        // dd($class);
         if (isset($orderBy)) {
 
           $class = $class->orderBy($orderBy, $order);
           $order = (!is_null($order) and $order === 'desc') ? 'asc' : 'desc';
 
         }
-
         
         $data['order'] = $order;
 
@@ -199,16 +217,28 @@ class DashbroadController extends Controller
 
     public function createTeacher(){
 
-        $data['name_class'] = DB::table('classes')->get();
+        $data['user'] = Auth::user(); 
+        $id_users =  Auth::user()->id;
 
-          $data['totalStu'] =  DB::table('classes')->select('name_student')->sum('name_student');
-          $data['sameteacher'] = DB::table('teacher')->count();
-          $data['sameClass'] = DB::table('classes')->count();
-          $data['user'] = Auth::user();        
+        $data['totalStu'] =  DB::table('classes')->select('name_student')->where('id_users',$id_users)->sum('name_student');
+        $data['sameteacher'] = DB::table('teacher')->where('id_users',$id_users)->count();
+        $data['sameClass'] = DB::table('classes')->where('id_users',$id_users)->count();        
+
+        $data['name_class'] = DB::table('classes')->where('id_users',$id_users)->get();
+
+        // $data['totalStu'] =  DB::table('classes')->select('name_student')->sum('name_student');
+        // $data['sameteacher'] = DB::table('teacher')->count();
+        // $data['sameClass'] = DB::table('classes')->count();
+        // $data['user'] = Auth::user();
+
+
       return view('teacher.create-teacher',$data);
     }
 
     public function insertTeacher(Request $request){
+
+        $id_teacher = Auth::user()->id; 
+
 
       if ($request->hasFile('filesImage')) {
             $file = $request->filesImage;
@@ -265,7 +295,8 @@ class DashbroadController extends Controller
         'born' => $request->input('born'),
         'class' => $request->input('class'),
         'position'=> $request->input('position'),
-        'filesImage' =>$request->filesImage->getClientOriginalName(),     
+        'filesImage' =>$request->filesImage->getClientOriginalName(),
+        'id_users' => $id_teacher,    
       ]);
       return redirect('teacher');
 
@@ -281,14 +312,21 @@ class DashbroadController extends Controller
       $data['position'] = DB::table('teacher')->where('id',$id)->value('position');
       $data['filesImage'] = DB::table('teacher')->where('id',$id)->value('filesImage');
 
+        $data['user'] = Auth::user(); 
+        $id_users =  Auth::user()->id;
 
-      $data['name_class'] = DB::table('classes')->get();
+        $data['name_class'] = Classes::get();
 
-      
-          $data['totalStu'] =  DB::table('classes')->select('name_student')->sum('name_student');
-          $data['sameteacher'] = DB::table('teacher')->count();
-          $data['sameClass'] = DB::table('classes')->count();
-          $data['user'] = Auth::user();  
+
+
+        $data['totalStu'] =  DB::table('classes')->select('name_student')->where('id_users',$id_users)->sum('name_student');
+        $data['sameteacher'] = DB::table('teacher')->where('id_users',$id_users)->count();
+        $data['sameClass'] = DB::table('classes')->where('id_users',$id_users)->count();
+
+          // $data['totalStu'] =  DB::table('classes')->select('name_student')->sum('name_student');
+          // $data['sameteacher'] = DB::table('teacher')->count();
+          // $data['sameClass'] = DB::table('classes')->count();
+          // $data['user'] = Auth::user();  
       
       return view('teacher.edit-teacher',$data);
 
@@ -345,12 +383,20 @@ class DashbroadController extends Controller
 
   public function Teacher(Request $request){
 
-    $data['totalStu'] = DB::table('classes')->select('name_student')->sum('name_student');
-    $data['sameteacher'] = DB::table('teacher')->count();
-    $data['sameClass'] = DB::table('classes')->count();
-    $data['user'] = Auth::user();  
-    $teacher = DB::table('teacher');
-   
+        $data['user'] = Auth::user(); 
+        $id_users =  Auth::user()->id;
+
+        $data['totalStu'] =  DB::table('classes')->select('name_student')->where('id_users',$id_users)->sum('name_student');
+        $data['sameteacher'] = DB::table('teacher')->where('id_users',$id_users)->count();
+        $data['sameClass'] = DB::table('classes')->where('id_users',$id_users)->count();    
+
+    // $data['totalStu'] = DB::table('classes')->select('name_student')->sum('name_student');
+    // $data['sameteacher'] = DB::table('teacher')->count();
+    // $data['sameClass'] = DB::table('classes')->count();
+    // $data['user'] = Auth::user();
+
+    $teacher = Teacher::with('classes')->where('id_users',$id_users);    
+
 
     $orderBy = $request->input('orderBy');
     $order = $request->input('order');
@@ -367,8 +413,9 @@ class DashbroadController extends Controller
 
     $data['orderBy'] = $orderBy;
 
-    $data['teacher'] = $teacher->orderBy('id', 'desc')->paginate(4);
-
+    $data['teacher'] = $teacher->paginate(4);
+// var_dump($data['teacher']);
+// die;
     return view('teacher.teacher', $data);
   }
   

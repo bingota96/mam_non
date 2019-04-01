@@ -19,10 +19,6 @@ Route::get('login','HomeController@Login')->name('Login');
 Route::post('login','HomeController@insertLogin')->name('post.login');
 
 Route::group(['middleware' => ['Mymiddleware']], function () {
- 
-	//Register
-	Route::get('register','HomeController@Register')->name('register');
-	Route::post('register','HomeController@insertRegister')->name('insertRegister');
 
 	//Dashbroad
 	 Route::get('dashbroad','DashbroadController@Dashbroad')->name('dashbroad');
@@ -43,5 +39,8 @@ Route::group(['middleware' => ['Mymiddleware']], function () {
 	 Route::post('teacher/destroy/{id}','DashbroadController@destroyTeacher')->name('destroyTeacher');
 	 Route::post('class/destroy/{id}','DashbroadController@destroyClass')->name('destroyClass');
  });
+//Register
+	Route::get('register','HomeController@Register')->name('register');
+	Route::post('register','HomeController@insertRegister')->name('insertRegister');
  //admin-logout
  Route::get('logout','HomeController@logout')->name('logout');

@@ -81,9 +81,14 @@ label#image {
 						<label for="inputEmail" class="col-sm-5 form-control-label">Lớp</label>
 						<div class="col-sm-5">
 							<select type="number" class="form-control" id="inputNumber1" name="class">
-							<option> {{$class}}</option>	
-								@foreach($name_class as $ten_lop_hoc)
-							<option> {{$ten_lop_hoc -> class}}</option>							
+
+							
+
+							@foreach($name_class as $class )
+								
+							<option value="{{ $class->id }}"> {{ $class->class }}
+							</option>
+
 							@endforeach
 
 							</select>

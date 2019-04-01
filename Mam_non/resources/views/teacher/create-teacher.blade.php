@@ -66,7 +66,7 @@ label#image {
 						<div class="col-sm-7">
 							<select type="number" class="form-control" id="inputNumber2" name="born">									
 								@for( $i=1980; $i <= 2000 ; $i++)
-									<option>{{$i}}</option>
+									<option>{{ $i }}</option>
 								@endfor		
 								
 							</select>
@@ -85,7 +85,9 @@ label#image {
 
 							@foreach($name_class as $ten_lop_hoc)
 
-							<option> {{$ten_lop_hoc -> class}}</option>	
+							<option value="{{ $ten_lop_hoc->id }}"> 
+								{{ $ten_lop_hoc->class }}
+							</option>	
 
 							@endforeach
 
