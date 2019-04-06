@@ -3,28 +3,7 @@
 @section('title','Create Class')
 
 @section('content')
-<style type="text/css">
-
-	input#inputEmail3 {
-    width: 400px;
-}
-	#inputNumber1 {
-    width: 150px;
-}
-	#inputNumber2 {
-    width: 80px;
-}
-h3 {
-    margin-top: 20px;
-    margin-bottom: 30px;
-}
-.row {
-    
-    padding-left: 10%;
-    padding-top: 10px;
-    margin-top: 20px;
-}
-</style>
+<link rel="stylesheet" type="text/css" href="{{ asset('css1/createClass.css') }}">
 <div class="container-fluid">
 			<h3>Tạo Lớp Học</h3>
 	<div class="container">
@@ -49,7 +28,6 @@ h3 {
 						<label for="inputPassword3" class="col-sm-5 form-control-label">Độ tuổi (*)</label>
 						<div class="col-sm-7">
 							<select type="number" class="form-control" id="inputNumber1" name="age">
-								<option>1</option>
 								<option>2</option>
 								<option>3</option>
 								<option>4</option>

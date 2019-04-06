@@ -1,0 +1,19 @@
+	input#inputEmail3 {
+    width: 400px;
+}
+	#inputNumber1 {
+    width: 150px;
+}
+	#inputNumber2 {
+    width: 80px;
+}
+h3 {
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+.row {
+    
+    padding-left: 10%;
+    padding-top: 10px;
+    margin-top: 20px;
+}

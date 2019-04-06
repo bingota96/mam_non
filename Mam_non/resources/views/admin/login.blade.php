@@ -7,34 +7,10 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<title>Page Title</title>
 		<link href="autocss/app.css" rel="stylesheet">	
+		<link rel="stylesheet" type="text/css" href="{{ asset('css1/login.css') }}">
 		<!-- Bootstrap CSS -->
 		<!-- <link rel="stylesheet" href="Bootstrap/bootstrap-4.3.1-dist/css/bootstrap.min.css" > -->
 	</head>
-	<style>
-	.panel-heading {
-	    text-align: center;
-	}	
-	.panel-body {
-	    padding: 50px;
-	}
-	.col-md-8.col-md-offset-2 {
-	    margin-top: 20px;
-	}
-	span {
-	    display: flex;
-	}
-	a {
-		font-size: 1.5rem;
-	    margin-left: 5px;
-	}
-	p,body {
-	    font-size: 1.5rem;
-	}
-	p {
-    text-align: center;
-    padding: 15px;
-}
-</style>
 	<body>
 			<div class="container-fluid">
 		<div class="row">

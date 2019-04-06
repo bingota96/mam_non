@@ -3,46 +3,7 @@
 @section('titie','Danh sách lớp học')
 
 @section('content')
-<style type="text/css">
-table{
-	border: 2px solid black;
-}
-th,td{
-	border-left:  2px solid black;
-}
-
-button{
-	margin-bottom: 20px;
-}
-.btn-toolbar.justify-content-between {
-	margin-top: 40px;
-}
-.card-header{
-	padding: 0px;
-}
-h3 {
-	margin-top: 20px;
-}
-.flex{
-	margin-top: 10px;
-}
-/*th.img {
-    background: url(image/icons8-sort-down-26.png) no-repeat right 50%;
-    }*/
-    .hinhanh {
-    	margin-left: 15px;
-    }
-    input.edit {
-    	margin-right: 20px;
-    }
-    th.acction ,.tech ,.age,.stu{
-    	text-align: center;
-    	width: 13%;
-    }
-    td {
-    	text-align: center;
-    }
-</style>
+<link rel="stylesheet" type="text/css" href="{{ asset('css1/classes.css') }}">
 <div class="container-fluid">
 	<h3>Danh Sách Lớp Học</h3>	
 	<div class="container">		
@@ -174,9 +135,6 @@ h3 {
 		            </div>
 	         </div>
       </div>
-<script src="bootstrap-4.0.0/js/jquery-3.3.1.slim.min.js" ></script>
-<script src="bootstrap-4.0.0/js/popper.min.js" ></script>
-<script src="bootstrap-4.0.0/js/bootstrap.min.js" ></script>
 <script type="text/javascript">
 	$(document).ready(function () {	
 		$.ajaxSetup({
@@ -199,25 +157,18 @@ h3 {
 			// gắn giá tri cho modal
 			var attrDestroy = $(this).attr('data-id');
 			$('#delete').attr('rowId',attrDestroy);
-			var row = $('#delete').attr('rowId');	
+			$('#delete').attr('data-url',url);
+			var row = $('#delete').attr('rowId');
+
 		});
 
 		$(document).on('click','#delete',function(e){	
-			// e.preventDefault();	
-			// if (is_sending) return false;	
+			e.preventDefault();	
 			$.ajax({
 				type:'post',
-				url : url,
-				// cache: false,
-				// beforeSend: function () {
-				// 	is_sending = true;
-				// },
-				// complete: function () {
-				// 	is_sending = false;
-				// },
+				url : $('#delete').attr('data-url'),
 				success : function(data){	  	
-					$('tr#'+ row).remove();
-					
+					$('tr#'+ $('#delete').attr('rowId')).remove();					
 				}
 			});
 		});

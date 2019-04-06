@@ -16,86 +16,51 @@ class DashbroadController extends Controller
 
     public function Dashbroad(){
 
-        $data['user'] = Auth::user(); 
-        $id_users =  Auth::user()->id;
+            $data['teacher'] = new Teacher();
 
-//table-classes
-          $data['tow'] = DB::table('classes')->where('age','2')->where('id_users',$id_users)->count();
-          $data['people2'] = DB::table('classes')->where('age',2)->where('id_users',$id_users)->select('name_student')->sum('name_student');
+            $data['class'] = new Classes(); 
 
-          $data['three'] = DB::table('classes')->where('age',3)->where('id_users',$id_users)->count();
-          $data['people3'] = DB::table('classes')->where('age',3)->where('id_users',$id_users)->select('name_student')->sum('name_student');
+            $data['ageCount']= $data['class']->countAges('count(*) as age_count, age','age');
+            $data['ageSum']= $data['class']->countAges('SUM(name_student) as age_sum, age','age');
 
-          $data['four'] = DB::table('classes')->where('age',4)->where('id_users',$id_users)->count();
-          $data['people4'] = DB::table('classes')->where('age',4)->where('id_users',$id_users)->select('name_student')->sum('name_student');
-
-          $data['five'] = DB::table('classes')->where('age',5)->where('id_users',$id_users)->count();
-          $data['people5'] = DB::table('classes')->where('age',5)->where('id_users',$id_users)->select('name_student')->sum('name_student');
-          
-//table -teacher
-          $data['chinhthuc'] = DB::table('teacher')->where('position','Chính thức')->where('id_users',$id_users)->count();
-
-          $data['thoivu'] = DB::table('teacher')->where('position','Thời vụ')->where('id_users',$id_users)->count();
-
-          $data['thuviec'] = DB::table('teacher')->where('position','Thử việc')->where('id_users',$id_users)->count();
-
-          $data['partime'] = DB::table('teacher')->where('position','Part time')->where('id_users',$id_users)->count();
-
-
-
-          $data['totalStu'] =  DB::table('classes')->select('name_student')->where('id_users',$id_users)->sum('name_student');
-          $data['sameteacher'] = DB::table('teacher')->where('id_users',$id_users)->count();
-          $data['sameClass'] = DB::table('classes')->where('id_users',$id_users)->count();
-              
-  	    	return view('dashbroad.dashbroad',$data);
-      }
+        return view('dashbroad.dashbroad',$data);
+    }
+    
 //end-dashbroad
 
     public function createClass(){
 
-        $data['user'] = Auth::user(); 
-        $id_users =  Auth::user()->id;
-
-        $data['totalStu'] =  DB::table('classes')->select('name_student')->where('id_users',$id_users)->sum('name_student');
-        $data['sameteacher'] = DB::table('teacher')->where('id_users',$id_users)->count();
-        $data['sameClass'] = DB::table('classes')->where('id_users',$id_users)->count();
- 
-
-      return view('classes.createClass',$data);
+        return view('classes.createClass');
     }
 
     public function insertClass(Request $request) {
 
-        $id_class = Auth::user()->id; 
-
         $getInput = Input::all();
-      $rules = [
-        'class' =>'required|max:30',
-        'age' => 'required',
-        'number_student' => 'required',
-      ];
+        $rules = [
+            'class' =>'required|max:30',
+            'age' => 'required',
+            'number_student' => 'required',
+        ];
 
-      $messages = [
-        'required' =>  'Trường :attribute là bắt buộc.',   
-        'max' => 'Trường :attribute không lớn hơn :max.',
-      
+        $messages = [
+            'required' =>  'Trường :attribute là bắt buộc.',   
+            'max' => 'Trường :attribute không lớn hơn :max.',
+            
 
         ];
-      $validator = Validator::make($getInput, $rules, $messages);
+        $validator = Validator::make($getInput, $rules, $messages);
 
-      if( $validator->fails() ){
-        return redirect()->back()
-                         ->withInput()
-                         ->withErrors( $validator );
-      }
- 
-      $user = DB::table('classes')->insert([
-        'class'=>$request->input('class'),
-        'age'=>$request->input('age'),
-        'name_student'=>$request->input('number_student'),
-        'id_users' => $id_class,
-      ]);
-      return redirect('class');
+        if( $validator->fails() ){
+            return redirect()->back()
+            ->withInput()
+            ->withErrors( $validator );
+        }
+
+        $insert = new Classes();
+        $insert->insert($request);
+
+        return redirect('class');
+    }
 // Cách 2
     //   $messages = [
     //     'required' => 'Trường :attribute bắt buộc nhập.',
@@ -120,28 +85,17 @@ class DashbroadController extends Controller
      //        'age'    => 'required',
      //        'number_student' => 'required|min:2',           
      //    ]);
-    }
+     
 //end-insert-class
 
     public function editClass($id){
 
-      $data['class1'] = DB::table('classes')->count();
-    // if ($data['class'] == null) {
-    //     $data['msg'] = 'Does not exist any class !';
-    //       return view('classes.edit-classes',$data);
-    //   }
-
-
-      $data['class'] = DB::table('classes')->where('id',$id)->value('class');
-      $data['age'] = DB::table('classes')->where('id',$id)->value('age');
-      $data['number_student'] = DB::table('classes')->where('id',$id)->value('name_student');
-
-          $data['totalStu'] =  DB::table('classes')->select('name_student')->sum('name_student');
-          $data['sameteacher'] = DB::table('teacher')->count();
-          $data['sameClass'] = DB::table('classes')->count();
-          $data['user'] = Auth::user();              
+      $data = new Classes();
+      $data['class']= $data->countAge('id',$id);
+     
       return view('classes.edit-classes',$data);
-    }
+  }
+
     public function updateClass(Request $request,$id ){
 
       $getInput = Input::all();
@@ -149,255 +103,151 @@ class DashbroadController extends Controller
         'class' =>'required|max:30',
         'age' => 'required',
         'number_student' => 'required',
-      ];
+    ];
 
-      $messages = [
+    $messages = [
         'required' =>  'Trường :attribute là bắt buộc.',   
         'max' => 'Trường :attribute không lớn hơn :max.',
-      
-        ];
-      $validator = Validator::make($getInput, $rules, $messages);
+        
+    ];
 
-      if( $validator->fails() ){
+    $validator = Validator::make($getInput, $rules, $messages);
+
+    if( $validator->fails() ){
         return redirect()->back()
-                         ->withInput()
-                         ->withErrors( $validator );
-      }
-      
-      $user = DB::table('classes')->where('id' ,$id)->update([
-        'class'=>$request->input('class'),
-        'age'=>$request->input('age'),
-        'name_student'=>$request->input('number_student'),
-      ]);      
-      return redirect('class'); 
+        ->withInput()
+        ->withErrors( $validator );
     }
+    
+    $editClass =  new Classes();
+    $editClass->editClass($id,$request);
+
+    return redirect('class'); 
+}
 //end-edit-class
 
-    public function Class(Request $request){
+public function Class(Request $request){
 
-        
-   
-        $data['user'] = Auth::user(); 
-        $id_users =  Auth::user()->id;
+    $id_users =  Auth::user()->id;
 
-        $data['totalStu'] =  DB::table('classes')->select('name_student')->where('id_users',$id_users)->sum('name_student');
-        $data['sameteacher'] = DB::table('teacher')->where('id_users',$id_users)->count();
-        $data['sameClass'] = DB::table('classes')->where('id_users',$id_users)->count();
+    $class = Classes::withCount('teacher')->where('id_users',$id_users);
 
-        // $data['totalStu'] = DB::table('classes')->select('name_student')->sum('name_student');
-        // $data['sameteacher'] = DB::table('teacher')->count();
-        // $data['sameClass'] = DB::table('classes')->count();
-        // $data['user'] = Auth::user();
+    $orderBy = $request->input('orderBy');
+    $order = $request->input('order');
 
-       
-        
-        $class = Classes::withCount('teacher')->where('id_users',$id_users);
-        
-        $orderBy = $request->input('orderBy');
-        $order = $request->input('order');
+    if (isset($orderBy)) {
 
-        // dd($class);
-        if (isset($orderBy)) {
+      $class = $class->orderBy($orderBy, $order);
+      $order = (!is_null($order) and $order === 'desc') ? 'asc' : 'desc';
 
-          $class = $class->orderBy($orderBy, $order);
-          $order = (!is_null($order) and $order === 'desc') ? 'asc' : 'desc';
+  }
+  
+    $data['order'] = $order;
 
-        }
-        
-        $data['order'] = $order;
+    $data['orderBy'] = $orderBy;
 
-        $data['orderBy'] = $orderBy;
+    $data['class'] = $class->orderBy('id', 'desc')->paginate(4);
 
-        $data['class'] = $class->orderBy('id', 'desc')->paginate(4);
-
-      return view('classes.classes',$data);
-    }
+  return view('classes.classes',$data);
+}
 
 //end-class
 
-    public function createTeacher(){
+public function createTeacher(){       
 
-        $data['user'] = Auth::user(); 
-        $id_users =  Auth::user()->id;
+    $class= new Classes();
+    $data['name_class'] = $class->sameClass()->get();
 
-        $data['totalStu'] =  DB::table('classes')->select('name_student')->where('id_users',$id_users)->sum('name_student');
-        $data['sameteacher'] = DB::table('teacher')->where('id_users',$id_users)->count();
-        $data['sameClass'] = DB::table('classes')->where('id_users',$id_users)->count();        
+   return view('teacher.create-teacher',$data);
+}
 
-        $data['name_class'] = DB::table('classes')->where('id_users',$id_users)->get();
+public function insertTeacher(Request $request){
 
-        // $data['totalStu'] =  DB::table('classes')->select('name_student')->sum('name_student');
-        // $data['sameteacher'] = DB::table('teacher')->count();
-        // $data['sameClass'] = DB::table('classes')->count();
-        // $data['user'] = Auth::user();
+    $getInput = Input::all();
 
-
-      return view('teacher.create-teacher',$data);
-    }
-
-    public function insertTeacher(Request $request){
-
-        $id_teacher = Auth::user()->id; 
-
-
-      if ($request->hasFile('filesImage')) {
-            $file = $request->filesImage;
-
-     //        //Lấy Tên files
-            $fileName = $file->getClientOriginalName();
-     //        echo '<br/>';
-
-     //        //Lấy Đuôi File
-     //      echo 'Đuôi file: ' . $duoi =$file->getClientOriginalExtension();
-     //        echo '<br/>';
-
-     //        //Lấy đường dẫn tạm thời của file
-     //        echo 'Đường dẫn tạm: ' . $file->getRealPath();
-     //        echo '<br/>';
-
-     //        //Lấy kích cỡ của file đơn vị tính theo bytes
-     //        echo 'Kích cỡ file: ' . $file->getSize();
-     //        echo '<br/>';
-
-     //        //Lấy kiểu file
-     //        echo 'Kiểu files: ' . $file->getMimeType();
-     //      
-
-
-      $request->filesImage->storeAs('image', $fileName);
-    }
-      $getInput = Input::all();
-
-      $rules = [
+    $rules = [
         "teacher" => 'required|max:50',
         'born' =>'required',
         'position' =>'required',
         'filesImage' =>'required|image|mimes:jpeg,png,jpg,gif|max:3072',
-      ]; 
+    ]; 
 
-      $messages = [
+    $messages = [
         'required' => 'Trường :attribute là bắt buộc.',
         'max' => 'Quá :max kí tự.',
         'image' => 'Bắt buộc là ảnh',
         'mimes' =>' ',
-      ];
+    ];
 
-      $validator = Validator::make($getInput,$rules,$messages);
+    $validator = Validator::make($getInput,$rules,$messages);
 
-      if( $validator ->fails()){
+    if( $validator ->fails()){
         return redirect()->back()
-                         ->withInput()
-                         ->withErrors($validator);
-      }
+        ->withInput()
+        ->withErrors($validator);
+    }
 
-      $data['teacher'] = DB::table('teacher')->insert([
-        'teacher' => $request->input('teacher'),
-        'born' => $request->input('born'),
-        'class' => $request->input('class'),
-        'position'=> $request->input('position'),
-        'filesImage' =>$request->filesImage->getClientOriginalName(),
-        'id_users' => $id_teacher,    
-      ]);
-      return redirect('teacher');
+    $insertTeacher = new Teacher();
+    $insertTeacher->insertTeacher($request);
 
-    } 
+    return redirect('teacher');
+
+} 
 
 //end-insert-teacher    
 
-   public function editTeacher($id){
+public function editTeacher($id){
 
-      $data['teacher'] = DB::table('teacher')->where('id',$id)->value('teacher');
-      $data['born'] = DB::table('teacher')->where('id',$id)->value('born');
-      $data['class'] = DB::table('teacher')->where('id',$id)->value('class');
-      $data['position'] = DB::table('teacher')->where('id',$id)->value('position');
-      $data['filesImage'] = DB::table('teacher')->where('id',$id)->value('filesImage');
+    $teacher = new Teacher();
+    $data['teacher'] = $teacher->countTeacher('id',$id);
 
-        $data['user'] = Auth::user(); 
-        $id_users =  Auth::user()->id;
+    $class= new Classes();
+    $data['name_class'] = $class->sameClass()->get();
 
-        $data['name_class'] = Classes::get();
+  
+  return view('teacher.edit-teacher',$data);
 
+}
 
+public function updateTeacher(Request $request,$id){
 
-        $data['totalStu'] =  DB::table('classes')->select('name_student')->where('id_users',$id_users)->sum('name_student');
-        $data['sameteacher'] = DB::table('teacher')->where('id_users',$id_users)->count();
-        $data['sameClass'] = DB::table('classes')->where('id_users',$id_users)->count();
+    // Valiadte
+    $getInput = Input::all();
 
-          // $data['totalStu'] =  DB::table('classes')->select('name_student')->sum('name_student');
-          // $data['sameteacher'] = DB::table('teacher')->count();
-          // $data['sameClass'] = DB::table('classes')->count();
-          // $data['user'] = Auth::user();  
-      
-      return view('teacher.edit-teacher',$data);
-
-    }
-
-    public function updateTeacher(Request $request,$id){
-
-      //update-Image
-      if ($request->hasFile('filesImage')) {
-        $file = $request->filesImage;
-        $fileNameNew = $file->getClientOriginalName();
-        $request->filesImage->storeAs('image', $fileNameNew);
-      }
-        $file = $request->filesImage;
-        $data['filesImage'] = DB::table('teacher')->where('id',$id)->value('filesImage');
-        $fileName = isset( $file) ?  $file->getClientOriginalName()  : $data['filesImage'] ;
-
-        
-// Valiadte
-      $getInput = Input::all();
-
-      $rules = [
+    $rules = [
         "teacher" => 'required|max:50',
         'born' =>'required',
         'position' =>'required',
 
-      ]; 
+    ]; 
 
-      $messages = [
+    $messages = [
         'required' => 'Trường :attribute là bắt buộc.',
         'max' => 'Quá :max kí tự.',
-      ];
+    ];
 
-      $validator = Validator::make($getInput,$rules,$messages);
+    $validator = Validator::make($getInput,$rules,$messages);
 
-      if( $validator ->fails()){
+    if( $validator ->fails()){
         return redirect()->back()
-                         ->withInput()
-                         ->withErrors($validator);
-      }
+        ->withInput()
+        ->withErrors($validator);
+    }
 
-      $data['teacher'] = DB::table('teacher')->where('id' ,$id)->update([
-        'teacher' => $request->input('teacher'),
-        'born' => $request->input('born'),
-        'class' => $request->input('class'),
-        'position'=> $request->input('position'),
-        'filesImage' =>$fileName,
-            
-      ]);
-      return redirect('teacher');
+    $updateTeacher = new Teacher();
+    $updateTeacher->updateTeacher($id,$request);
 
-    }  
+return redirect('teacher');
+
+}  
 //end-edit-teacher
 
-  public function Teacher(Request $request){
-
-        $data['user'] = Auth::user(); 
-        $id_users =  Auth::user()->id;
-
-        $data['totalStu'] =  DB::table('classes')->select('name_student')->where('id_users',$id_users)->sum('name_student');
-        $data['sameteacher'] = DB::table('teacher')->where('id_users',$id_users)->count();
-        $data['sameClass'] = DB::table('classes')->where('id_users',$id_users)->count();    
-
-    // $data['totalStu'] = DB::table('classes')->select('name_student')->sum('name_student');
-    // $data['sameteacher'] = DB::table('teacher')->count();
-    // $data['sameClass'] = DB::table('classes')->count();
-    // $data['user'] = Auth::user();
-
-    $teacher = Teacher::with('classes')->where('id_users',$id_users);    
+public function Teacher(Request $request){
 
 
+    $id_users =  Auth::user()->id;
+
+    $teacher = Teacher::with('classes')->where('id_users',$id_users);   
     $orderBy = $request->input('orderBy');
     $order = $request->input('order');
 
@@ -406,39 +256,29 @@ class DashbroadController extends Controller
       $teacher = $teacher->orderBy($orderBy, $order);
       $order = (!is_null($order) and $order === 'desc') ? 'asc' : 'desc';
 
-    }
-
-    
-    $data['order'] = $order;
-
-    $data['orderBy'] = $orderBy;
-
-    $data['teacher'] = $teacher->paginate(4);
-// var_dump($data['teacher']);
-// die;
-    return view('teacher.teacher', $data);
   }
-  
-  // public function postTeacher(Request $request){
 
-  // if ($request->all()){
-  //   $data['teacher'] = DB::table('teacher')->orderBy('teacher')->paginate(4);
-  // }
-  //   $data['totalStu'] =  DB::table('classes')->select('name_student')->sum('name_student');
-  //   $data['sameteacher'] = DB::table('teacher')->count();
-  //   $data['sameClass'] = DB::table('classes')->count();
-  //   $data['user'] = Auth::user(); 
-  //   return view('teacher.teacher',$data);
-  // }
+  
+  $data['order'] = $order;
+
+  $data['orderBy'] = $orderBy;
+
+
+  $data['teacher'] = $teacher->orderBy('id', 'desc')->paginate(4);
+
+  return view('teacher.teacher', $data);
+}
+
 //end-teacher
 
-  public function destroyTeacher(Request $request,$id){
+public function destroyTeacher(Request $request,$id){
 
-    $data['teacher'] = DB::table('teacher')->where('id' ,$id)->delete();
-  }
+   $delete =new Teacher();
+   $delete->countTeacher('id',$id)->delete();
+}
 
-  public function destroyClass(Request $request,$id){
+    public function destroyClass(Request $request,$id){
 
-    $data['teacher'] = DB::table('classes')->where('id' ,$id)->delete();
-  }
+        $data['teacher'] = DB::table('classes')->where('id' ,$id)->delete();
+    }
 }

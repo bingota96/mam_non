@@ -1,0 +1,12 @@
+	h3.modal-title {
+	    padding-left: 50px;
+	}
+	p{
+		text-align: center;
+	}
+	.modal-header{
+		border-bottom: 1px solid #1e2429;
+	}
+	.modal-footer {
+		border-top: 1px solid #1e2429;
+	}

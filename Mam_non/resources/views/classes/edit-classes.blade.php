@@ -3,28 +3,7 @@
 @section('title','Create Class')
 
 @section('content')
-<style type="text/css">
-
-	input#inputEmail3 {
-    width: 400px;
-}
-	#inputNumber1 {
-    width: 150px;
-}
-	#inputNumber2 {
-    width: 80px;
-}
-h3 {
-    margin-top: 20px;
-    margin-bottom: 30px;
-}
-.row {
-    
-    padding-left: 10%;
-    padding-top: 10px;
-    margin-top: 20px;
-}
-</style>
+<link rel="stylesheet" type="text/css" href="{{ asset('css1/editClass.css')}}">
 <div class="container-fluid">
 			<h3>Sửa Lớp Học</h3>
 	<div class="container">
@@ -37,7 +16,7 @@ h3 {
 					<div class="form-group row">
 						<label for="inputEmail3" class="col-sm-5 form-control-label">Tên Lớp Học (*)</label>
 						<div class="col-sm-7">
-							<input type="text" class="form-control" id="inputEmail3" name="class" value="{{$class}}">
+							<input type="text" class="form-control" id="inputEmail3" name="class" value="{{ $class->value('class') }}">
 						</div><!-- col-sm-7 -->
 					</div><!-- form-group row -->
 					@if( $errors->has('class') )
@@ -50,7 +29,7 @@ h3 {
 						<div class="col-sm-7">
 							
 							<select type="number" class="form-control" id="inputNumber1" name="age">
-								<option>{{$age}}</option>		
+								<option>{{ $class->value('age') }}</option>		
 								<option>1</option>
 								<option>2</option>
 								<option>3</option>
@@ -67,7 +46,7 @@ h3 {
 
 						<div class="col-sm-7">
 							<select type="number" class="form-control" id="inputNumber2" name="number_student" >
-								<option >{{$number_student}}</option>
+								<option >{{ $class->value('name_student') }}</option>
 								@for( $i=0; $i <= 200 ; $i++)
 
 									<option >{{$i}}</option>

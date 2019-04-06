@@ -1,0 +1,19 @@
+p{
+	font-weight: normal;
+	color: black;
+}
+a.nav-link.col-2 {
+    margin: auto;
+}
+.infor {margin-top: 15px;}
+.card-header{
+	padding: 0px;
+}
+.container-fluid {
+    margin-bottom: 20px;
+}
+.card.text-center {
+	background: red;
+    height: 25px;
+    margin-top: 50px;
+}

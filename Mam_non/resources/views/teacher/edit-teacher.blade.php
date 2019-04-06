@@ -3,38 +3,7 @@
 @section('title','Create teacher')
 
 @section('content')
-<style type="text/css">
-
-	input#inputEmail3 {
-    width: 300px;
-}
-	#inputNumber1 {
-    width: 200px;
-}
-	#inputNumber {
-    width: 200px;
- }   
-	#inputNumber2 {
-    width: 100px;
-}
-h3 {
-    margin-top: 20px;
-    margin-bottom: 30px;
-}
-.row {
-    
-    padding-left: 10%;
-    padding-top: 10px;
-    margin-top: 20px;
-}
-.col-sm-offset-2.col-sm-10 {
-    text-align: center;
-}
-label#image {
-    padding-top: 30px;
-}
-</style>
-
+<link rel="stylesheet" type="text/css" href="{{ asset('css1/editTeacher.css') }}">
 <div class="container-fluid">
 
     </ul>
@@ -48,7 +17,9 @@ label#image {
 					<div class="form-group row">
 						<label for="inputEmail3" class="col-sm-5 form-control-label">Tên giáo viên (*)</label>
 						<div class="col-sm-7">
-							<input type="text" class="form-control" id="inputEmail3" name="teacher" value="{{$teacher}}" >
+
+							<input type="text" class="form-control" id="inputEmail3" name="teacher" value="{{ $teacher->value('teacher') }}" >
+														
 						</div><!-- col-sm-7 -->
 					</div><!-- form-group row -->
 
@@ -63,7 +34,7 @@ label#image {
 
 						<div class="col-sm-7">
 							<select type="number" class="form-control" id="inputNumber2" name="born">
-									<option>{{$born}}</option>							
+									<option>{{ $teacher->value('born') }}</option>							
 								@for( $i=1980; $i <= 2000 ; $i++)
 									<option>{{$i}}</option>
 								@endfor		
@@ -81,8 +52,6 @@ label#image {
 						<label for="inputEmail" class="col-sm-5 form-control-label">Lớp</label>
 						<div class="col-sm-5">
 							<select type="number" class="form-control" id="inputNumber1" name="class">
-
-							
 
 							@foreach($name_class as $class )
 								
@@ -104,7 +73,7 @@ label#image {
 						<label for="inputEmail" class="col-sm-5 form-control-label">Loại (*)</label>
 						<div class="col-sm-5">
 							<select type="text" class="form-control" id="inputNumber" name="position">
-								<option> {{$position}} </option>
+								<option> {{ $teacher->value('position') }} </option>
 								<option> Chính thức </option>
 								<option> Thử việc </option>
 								<option> Thời vụ </option>								
@@ -120,7 +89,7 @@ label#image {
 						<p style ="color:red;">{{$errors->first('filesImage')}}</p>
 
 					@endif
-							<input type="image" id="avatar" style="float:right;" src="image/{{$filesImage}}" alt="avatar" width="100" height="100">
+							<input type="image" id="avatar" style="float:right;" src="image/{{ $teacher->value('filesImage') }}" alt="avatar" width="100" height="100">
 
 							        <input type="file" id="uploadFile" name="filesImage" onchange="loadFile(event)" hidden >
 							      
@@ -137,9 +106,6 @@ label#image {
 		</div><!-- row -->
 	</div><!-- container -->
 </div><!-- container-fluid -->
-		<script src="bootstrap-4.0.0/js/jquery-3.3.1.min.js" ></script>
-		<script src="bootstrap-4.0.0/js/popper.min.js" ></script>
-		<script src="bootstrap-4.0.0/js/bootstrap.min.js" ></script>
 <script type="text/javascript">
 		var loadFile = function(event) {
 	    var output = document.getElementById('avatar');

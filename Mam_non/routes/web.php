@@ -20,6 +20,7 @@ Route::post('login','HomeController@insertLogin')->name('post.login');
 
 Route::group(['middleware' => ['Mymiddleware']], function () {
 
+	 Route::get('master','DashbroadController@masterLayout')->name('masterLayout');
 	//Dashbroad
 	 Route::get('dashbroad','DashbroadController@Dashbroad')->name('dashbroad');
 	 //Class

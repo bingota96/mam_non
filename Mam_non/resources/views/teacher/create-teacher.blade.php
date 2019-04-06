@@ -3,40 +3,7 @@
 @section('title','Create teacher')
 
 @section('content')
-<style type="text/css">
-
-	input#inputEmail3 {
-    width: 300px;
-}
-	#inputNumber1 {
-    width: 200px;
-}
-	#inputNumber {
-    width: 200px;
- }   
-	#inputNumber2 {
-    width: 100px;
-}
-h3 {
-    margin-top: 20px;
-    margin-bottom: 30px;
-}
-.row {
-    
-    padding-left: 10%;
-    padding-top: 10px;
-    margin-top: 20px;
-}
-.col-sm-offset-2.col-sm-10 {
-    text-align: center;
-}
-label#image {
-    padding-top: 30px;
-}
-</style>
-	<script src="bootstrap-4.0.0/js/jquery-3.3.1.min.js" ></script>
-		<script src="bootstrap-4.0.0/js/popper.min.js" ></script>
-		<script src="bootstrap-4.0.0/js/bootstrap.min.js" ></script>
+<link rel="stylesheet" type="text/css" href="{{ asset('css1/createTeacher.css') }}">
 <div class="container-fluid">
 			<h3>Tạo Giáo Viên</h3>
 <div id="result">	</div>

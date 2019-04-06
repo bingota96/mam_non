@@ -10,36 +10,8 @@
 		<link href="autocss/app.css" rel="stylesheet">	
 		<!-- Bootstrap CSS -->
 		<link rel="stylesheet" href="bootstrap-4.0.0/css/bootstrap.min.css" >
+		<link rel="stylesheet" type="text/css" href="{{ asset('css1/register.css') }}">
 	</head>
-	<style>
-	.form-control,.btn ,body{
-		font-size: 1.5rem;
-	}
-	h3 {
-	    font-size: 2.5rem;
-	}
-	.panel-heading {
-	    text-align: center;
-	}	
-	.panel-body {
-	    padding: 15px;
-	}
-	.col-md-8.col-md-offset-2 {
-	    margin-top: 20px;
-	}
-	input.form-control {
-    width: 80%;
-    margin-top: 15px;
-	}
-	label.col-md-4.control-label {
-	    margin-top: 15px;
-	}
-	button.btn.btn-primary {
-    margin-top: 15px;
-	}
-
-</style>
-
 	<body>
 
 	<div class="alert alert-danger print-error-msg" style="display:none">
@@ -119,7 +91,6 @@
                <!-- Modal Header -->
                <div class="modal-header">
                   <h3 class="modal-title">Đăng ký trường</h3>
-                  <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
                </div>
                <!-- Modal body -->
                <div class="modal-body">

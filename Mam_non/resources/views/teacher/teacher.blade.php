@@ -3,54 +3,7 @@
 @section('titie','Danh sách lớp học')
 
 @section('content')
-<style type="text/css">
-table{
-    border: 2px solid black;
-}
-th,td{
-    border-left:  2px solid black;
-}
-
-button{
-    margin-bottom: 20px;
-}
-.btn-toolbar.justify-content-between {
-    margin-top: 40px;
-}
-.card-header{
-    padding: 0px;
-}
-h3 {
-    margin-top: 20px;
-}
-.flex{
-    margin-top: 10px;
-}
-    /*th.img {
-        background: url(image/icons8-sort-down-26.png) no-repeat right 50%;
-        }*/
-        .hinhanh {
-            margin-left: 15px;
-        }
-        input.edit {
-            margin-right: 20px;
-        }
-        th.acction ,.stu, .img{
-            text-align: center;
-            width: 15%;
-        }
-        th.age{
-            text-align: center;
-            width: 10%; 
-        }
-        th.tech{
-            text-align: center;
-            width: 22%; 
-        }
-        td {
-            text-align: center;
-        }
-    </style>
+<link rel="stylesheet" type="text/css" href="{{ asset('css1/teacher.css')}}">
     <div class="container-fluid">
         <h3>Danh Sách Giáo Viên</h3>    
         <div class="container">
@@ -206,10 +159,6 @@ h3 {
                     </div>
              </div>
       </div>
-
-<script src="bootstrap-4.0.0/js/jquery-3.3.1.min.js" ></script>
-<script src="bootstrap-4.0.0/js/popper.min.js" ></script>
-<script src="bootstrap-4.0.0/js/bootstrap.min.js" ></script>
 <script type="text/javascript">
     
     $(document).on('click','#imageTeacher',function(e){
