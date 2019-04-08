@@ -28,6 +28,7 @@
 						<label for="inputPassword3" class="col-sm-5 form-control-label">Độ tuổi (*)</label>
 						<div class="col-sm-7">
 							<select type="number" class="form-control" id="inputNumber1" name="age">
+								<option>1</option>
 								<option>2</option>
 								<option>3</option>
 								<option>4</option>

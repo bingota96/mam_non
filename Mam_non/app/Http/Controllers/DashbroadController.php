@@ -11,6 +11,7 @@ use Illuminate\Http\UploadedFile;
 use Validator;
 use App\Classes;
 use App\Teacher;
+
 class DashbroadController extends Controller
 {
 
@@ -21,6 +22,7 @@ class DashbroadController extends Controller
             $data['class'] = new Classes(); 
 
             $data['ageCount']= $data['class']->countAges('count(*) as age_count, age','age');
+
             $data['ageSum']= $data['class']->countAges('SUM(name_student) as age_sum, age','age');
 
         return view('dashbroad.dashbroad',$data);
@@ -91,8 +93,8 @@ class DashbroadController extends Controller
     public function editClass($id){
 
       $data = new Classes();
-      $data['class']= $data->countAge('id',$id);
-     
+      $data['class']= $data->countAge($id);
+
       return view('classes.edit-classes',$data);
   }
 
@@ -128,25 +130,9 @@ class DashbroadController extends Controller
 
 public function Class(Request $request){
 
-    $id_users =  Auth::user()->id;
+    $class = new Classes();
+    $data['class'] = $class->sort($request);
 
-    $class = Classes::withCount('teacher')->where('id_users',$id_users);
-
-    $orderBy = $request->input('orderBy');
-    $order = $request->input('order');
-
-    if (isset($orderBy)) {
-
-      $class = $class->orderBy($orderBy, $order);
-      $order = (!is_null($order) and $order === 'desc') ? 'asc' : 'desc';
-
-  }
-  
-    $data['order'] = $order;
-
-    $data['orderBy'] = $orderBy;
-
-    $data['class'] = $class->orderBy('id', 'desc')->paginate(4);
 
   return view('classes.classes',$data);
 }
@@ -199,7 +185,7 @@ public function insertTeacher(Request $request){
 public function editTeacher($id){
 
     $teacher = new Teacher();
-    $data['teacher'] = $teacher->countTeacher('id',$id);
+    $data['teacher'] = $teacher->countTeacher($id);
 
     $class= new Classes();
     $data['name_class'] = $class->sameClass()->get();
@@ -245,40 +231,22 @@ return redirect('teacher');
 public function Teacher(Request $request){
 
 
-    $id_users =  Auth::user()->id;
-
-    $teacher = Teacher::with('classes')->where('id_users',$id_users);   
-    $orderBy = $request->input('orderBy');
-    $order = $request->input('order');
-
-    if (isset($orderBy)) {
-
-      $teacher = $teacher->orderBy($orderBy, $order);
-      $order = (!is_null($order) and $order === 'desc') ? 'asc' : 'desc';
-
-  }
-
-  
-  $data['order'] = $order;
-
-  $data['orderBy'] = $orderBy;
-
-
-  $data['teacher'] = $teacher->orderBy('id', 'desc')->paginate(4);
-
+    $class = new Teacher();
+    $data['teacher'] = $class->sort($request);
   return view('teacher.teacher', $data);
 }
 
 //end-teacher
 
-public function destroyTeacher(Request $request,$id){
+    public function destroyTeacher($id){
 
-   $delete =new Teacher();
-   $delete->countTeacher('id',$id)->delete();
-}
+       $delete =Teacher::find($id)->delete();
 
-    public function destroyClass(Request $request,$id){
+    }
 
-        $data['teacher'] = DB::table('classes')->where('id' ,$id)->delete();
+    public function destroyClass($id){
+
+    $delete =Classes::find($id)->delete();
+            
     }
 }

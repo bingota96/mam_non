@@ -74,9 +74,9 @@
 					<span class="name"style="padding-right: 73px;">Giáo viên</span>
 					<span class="name" style="font-weight: bold;">
 
-					@if( ($teacher->sameTeacher() ) != null )
+					@if( ($teacher->sameTeacher()->count() ) != null )
 
-						{{ $teacher->sameTeacher() }}
+						{{ $teacher->sameTeacher()->count() }}
 
 					@else{{'Chưa có giáo viên'}}						
 					@endif
@@ -86,9 +86,9 @@
 				<div class="infor">	             
 					<span class="name"style="padding-right: 73px;">Lớp</span>
 					<span class="name" style="font-weight: bold;">					
-						@if($class->sameClass() != null )
+						@if($class->sameClass()->count() != null )
 
-							{{ $class->sameClass() }}
+							{{ $class->sameClass()->count() }}
 
 						@else{{'Chưa có lớp'}}						
 					@endif</span>

@@ -43,4 +43,15 @@ class User extends Authenticatable
     {
         $this->attributes['password'] = bcrypt($password);
     }
+
+    public function insertUser($request)
+    {
+            $user = new User;
+            $user->name_school = $request ->input('name_school');
+            $user->principal = $request ->input('principal');
+            $user->address = $request ->input('address');
+            $user->email = $request ->input('email');
+            $user->password = $request->input('password');
+            $user-> save();
+    }    
 }

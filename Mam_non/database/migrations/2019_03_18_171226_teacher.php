@@ -17,9 +17,11 @@ class Teacher extends Migration
             $table->bigIncrements('id');
             $table->string('teacher');
             $table->integer('born');
-            $table->integer('class');
+            $table->unsignedBigInteger('classes_id');
+            $table->foreign('classes_id')->references('id')->on('classes')->onDelete('cascade');
             $table->string('position');
-            $table->integer('id_users');
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('filesImage');
             $table->timestamps();
         });

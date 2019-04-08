@@ -50,7 +50,7 @@
 						<div class="col-sm-5">
 							<select type="number" class="form-control" id="inputNumber1" name="class">
 
-							@foreach($name_class as $ten_lop_hoc)
+							@foreach( $name_class as $ten_lop_hoc)
 
 							<option value="{{ $ten_lop_hoc->id }}"> 
 								{{ $ten_lop_hoc->class }}

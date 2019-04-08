@@ -11,18 +11,14 @@ class Classes extends Model
 {
     protected $table = 'classes';
 
-    protected $fillable = [
-        'id', 'class','name_student','age', 'id_users',
-    ];
-
     public function teacher(){
-     	return $this->hasMany('App\Teacher','class','id');
+     	return $this->hasMany('App\Teacher','classes_id','id');
      }
      
     public function countAges($param,$value){
 
         $id_users = Auth::user()->id;
-        $countAges = Self::select(DB::raw($param))->where('id_users',$id_users)->groupBy($value)->get()->toArray();
+        $countAges = Self::select(DB::raw($param))->where('user_id',$id_users)->groupBy($value)->get()->toArray();
 
         $default= ['2','3','4','5'];
         $age = [];
@@ -40,7 +36,8 @@ class Classes extends Model
                 $value_push = 
                 [
                     'age' => $missing_posstion,
-                    "age_count" => 0
+                    "age_count" => 0,
+                    "age_sum" => 0
                 ];
 
                 $countAges[$i]=$value_push;
@@ -54,13 +51,18 @@ class Classes extends Model
     public function totalStu(){
 
         $id_users = Auth::user()->id;
-        return $this->select('name_student')->where('id_users',$id_users)->sum('name_student');
+        return $this->select('name_student')->where('user_id',$id_users)->sum('name_student');
     }
 
     public function sameClass(){
 
         $id_users = Auth::user()->id;
-        return $this->where('id_users',$id_users)->count();
+        return $this->where('user_id',$id_users);
+    }
+    public function countAge($id){
+
+        $id_users = Auth::user()->id;
+        return $this->where('id',$id)->where('user_id',$id_users);
     }
 
     public function insert( $request ){
@@ -70,7 +72,7 @@ class Classes extends Model
         $class->class = $request->input('class');
         $class->age = $request->input('age');
         $class->name_student = $request->input('number_student');
-        $class->id_users = $id_users;
+        $class->user_id = $id_users;
         $class->save();
     }
 
@@ -81,5 +83,28 @@ class Classes extends Model
                 'age'=>$request->input('age'),
                 'name_student'=>$request->input('number_student'),
             ]);
+    }
+    public function sort($request){
+
+    $id_users =  Auth::user()->id;
+
+    $class = Classes::withCount('teacher')->where('user_id',$id_users);
+
+    $orderBy = $request->input('orderBy');
+    $order = $request->input('order');
+
+    if (isset($orderBy)) {
+
+      $class = $class->orderBy($orderBy, $order);
+      $order = (!is_null($order) and $order === 'desc') ? 'asc' : 'desc';
+
+  }
+  
+    $data['order'] = $order;
+
+    $data['orderBy'] = $orderBy;
+
+    return $data['teacher'] = $class->orderBy('id', 'desc')->paginate(4);
+
     }
 }

@@ -17,3 +17,6 @@ a.nav-link.col-2 {
     height: 25px;
     margin-top: 50px;
 }
+.nav{
+    flex-wrap:initial;
+}

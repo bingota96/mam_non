@@ -28,9 +28,7 @@
 						</label>
 					</div><!--panel-heading!-->
 					<div class="panel-body">
-        <div id="result">
-            
-        </div>						
+										
 						<form class="form-horizontal" role="form" method="post" action="">
 							@csrf
 
@@ -148,8 +146,6 @@
 					},
 					success : function (data){
 
-                    //     $('#result').html(data);
-                    // }
 						if($.isEmptyObject(data.error)){
 							$('#myModal').modal('show');
 							$('#myModal').on('hidden.bs.modal', function (e) {

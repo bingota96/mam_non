@@ -14,13 +14,13 @@ class Teacher extends Model
 
     public function classes(){
 
-      return $this->belongsTo('App\Classes','class','id');
+      return $this->belongsTo('App\Classes','classes_id','id');
   }
 
     public function countTeachers() {
 
         $user_id = Auth::user()->id;
-        $count_positions = Self::select('position',DB::raw('count(*) as counter'))->where('id_users', $user_id)->groupBy('position')->get()->toArray();
+        $count_positions = Self::select('position',DB::raw('count(*) as counter'))->where('user_id', $user_id)->groupBy('position')->get()->toArray();
 
         $defaults = ['Chính thức','Thời vụ', 'Thử việc','Part time'];
 
@@ -39,7 +39,7 @@ class Teacher extends Model
 
                 $value_push = [
                     'position' => $missing_posstion,
-                    'counter' => 0,
+                    'counter' => 0,                   
                 ];
 
                 $count_positions[$i] = $value_push;
@@ -50,11 +50,15 @@ class Teacher extends Model
 
         return $count_positions;
     }   
+    public function countTeacher($id){
 
+        $id_users = Auth::user()->id;
+        return $this->where('id',$id)->where('user_id',$id_users);
+    }
     public function sameTeacher(){
 
        $id_users = Auth::user()->id;
-       return $this->where('id_users',$id_users)->count();
+       return $this->where('user_id',$id_users);
     }
 
     public function insertTeacher($request){
@@ -69,10 +73,10 @@ class Teacher extends Model
         $teacher = new Teacher;
         $teacher->teacher = $request->input('teacher');
         $teacher->born = $request->input('born');
-        $teacher->class = $request->input('class');
+        $teacher->classes_id = $request->input('class');
         $teacher->position= $request->input('position');
         $teacher->filesImage =$request->filesImage->getClientOriginalName();
-        $teacher->id_users = $id_teacher;    
+        $teacher->user_id = $id_teacher;    
         $teacher->save();
     }
 
@@ -85,10 +89,33 @@ class Teacher extends Model
     $teacher = Teacher::where('id' ,$id)->update([
         'teacher' => $request->input('teacher'),
         'born' => $request->input('born'),
-        'class' => $request->input('class'),
+        'classes_id' => $request->input('class'),
         'position'=> $request->input('position'),
         'filesImage' =>$fileName,
         
     ]);
-    }            
+    } 
+    public function sort($request){
+
+    $id_users =  Auth::user()->id;
+
+    $class = Teacher::withCount('classes')->where('user_id',$id_users);
+
+    $orderBy = $request->input('orderBy');
+    $order = $request->input('order');
+
+    if (isset($orderBy)) {
+
+      $class = $class->orderBy($orderBy, $order);
+      $order = (!is_null($order) and $order === 'desc') ? 'asc' : 'desc';
+
+  }
+  
+    $data['order'] = $order;
+
+    $data['orderBy'] = $orderBy;
+
+    return $data['class'] = $class->orderBy('id', 'desc')->paginate(4);
+
+    }           
 }

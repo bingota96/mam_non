@@ -28,6 +28,7 @@ class HomeController extends Controller
     	$password = $request->password;
 
     	if( Auth::attempt(['email' => $email, 'password' =>$password])) {
+
     		return redirect('dashbroad');
     	}
     	else {
@@ -59,16 +60,11 @@ class HomeController extends Controller
 
         if ($validator->passes()) {
             
-            $user = new User;
-            $user->name_school = $request ->input('name_school');
-            $user->principal = $request ->input('principal');
-            $user->address = $request ->input('address');
-            $user->email = $request ->input('email');
-            $user->password = $request->input('password');
-            $user-> save();
-
-            return response()->json(['success'=>'Added new records.']);
-        }else
+            $user = new User();
+            $user->insertUser($request);
+            
+        }
+        else
         {
             return response()->json(['error'=>$validator->errors()->all()]);   
         }
